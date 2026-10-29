@@ -31,7 +31,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Bowlby+One&family=Permanent+Marker&family=Rubik+Spray+Paint&family=Special+Elite&display=swap">
 <!-- o "?v=" força os navegadores a baixar a versão nova; aumente o número quando mudar o CSS ou o JS -->
-<link rel="stylesheet" href="estilo.css?v=12">
+<link rel="stylesheet" href="estilo.css?v=15">
 </head>
 <body>
 
@@ -169,6 +169,10 @@
               <p data-i18n="pedido_nao_faco">Antes de contar sua ideia, lembre que eu não faço:</p>
               <ul id="pedido-nao-faco-lista"></ul>
             </div>
+            <details class="dicas-ref" id="dicas-ref" hidden>
+              <summary id="dicas-ref-titulo"></summary>
+              <ul id="dicas-ref-lista"></ul>
+            </details>
             <textarea id="pedido-ideia" rows="5" maxlength="600"></textarea>
             <p class="nota" data-i18n="ideia_opcional">Opcional, mas ajuda muito.</p>
           </div>
@@ -272,6 +276,7 @@
       <strong id="visor-titulo"></strong>
       <span id="visor-legenda"></span>
       <span id="visor-contador"></span>
+      <button class="botao visor-pedir" id="visor-pedir" type="button" data-visor="pedir" data-i18n="pedir_igual">Quero um assim</button>
     </figcaption>
   </figure>
   <button class="visor-seta visor-proxima" type="button" data-visor="proxima" data-i18n-aria="proxima" aria-label="Próxima">→</button>
@@ -300,6 +305,6 @@
   </symbol>
 </svg>
 
-<script src="script.js?v=13"></script>
+<script src="script.js?v=15"></script>
 </body>
 </html>

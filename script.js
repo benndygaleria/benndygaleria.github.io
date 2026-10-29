@@ -178,7 +178,7 @@
       const unidade = iOutro >= 0 ? d.precos.outros[iOutro].unidade : "";
       const detalhe = q && unidade ? `${q} ${unidade}${q > 1 ? "s" : ""}` : o.tamanho;
       const tipo = [base.estilo ? nomeServico(base.estilo, d) : "", detalhe].filter(Boolean).join(" · ");
-      return { cat, src: o.imagem, titulo: o.titulo, alt: o.descricao || o.titulo, tipo, preco: textoPreco(estimar(base, d), t), adulto: !!base.adulto };
+      return { cat, src: o.imagem, titulo: o.titulo, alt: o.descricao || o.titulo, tipo, preco: textoPreco(estimar(base, d), t), adulto: !!base.adulto, obra: base, pedivel: !!acharServico(base) };
     });
     if (filtro !== "todos" && !categorias.some((c) => c.id === filtro)) filtro = "todos";
 
@@ -216,6 +216,7 @@
             <span class="peca-meta">${it.tipo ? `<span class="peca-estilo">${esc(it.tipo)}</span>` : ""}<b>${esc(it.preco)}</b></span>
           </span>
         </button>
+        ${it.pedivel ? `<a class="peca-pedir" href="#pedido" data-pedir="${i}" aria-label="${esc(preencher(t.pedir_igual_aria, { titulo: it.titulo }))}">${esc(t.pedir_igual)}</a>` : ""}
       </figure>`)
       .join("");
     aplicarFiltro();
@@ -394,6 +395,48 @@
   }
   const servicoAtual = () => servicos(contextoPedido.d).find((s) => s.chave === pedido.servico);
 
+  // acha o serviço (estilo ou "mais serviços") de uma arte da galeria
+  function acharServico(obra) {
+    const cat = normalizar(obra.estilo);
+    if (!cat) return null;
+    const e = (BASE.precos?.estilos || []).findIndex((x) => normalizar(x.nome) === cat);
+    if (e >= 0) return { chave: `e${e}`, base: BASE.precos.estilos[e] };
+    const o = (BASE.precos?.outros || []).findIndex((x) => normalizar(x.nome) === cat);
+    return o >= 0 ? { chave: `o${o}`, base: BASE.precos.outros[o] } : null;
+  }
+
+  // "Quero um assim": abre o pedido já com o estilo, o tamanho e os extras da arte escolhida
+  let ideiaAutomatica = "";
+  function pedirIgual(obra, titulo) {
+    const achado = acharServico(obra);
+    if (!achado) return;
+    const { base } = achado;
+    pedido.servico = achado.chave;
+    const radio = $(`#servico-${achado.chave}`);
+    if (radio) radio.checked = true;
+    const iTamanho = (base.itens || []).findIndex((x) => normalizar(x.tipo) === normalizar(obra.tamanho));
+    pedido.tamanho = Math.max(0, iTamanho);
+    pedido.adicionais = {};
+    const marcados = (obra.adicionais || []).map(normalizar);
+    (base.adicionais || []).forEach((a) => {
+      const id = normalizar(a.nome);
+      if (a.porUnidade) pedido.adicionais[id] = Math.max(0, Math.min(maxExtras(), Number(obra.ocsExtras) || 0));
+      else if (marcados.includes(id)) pedido.adicionais[id] = 1;
+    });
+    pedido.quantidade = Math.max(1, Number(obra.quantidade) || 1);
+    const ideia = $("#pedido-ideia");
+    // só preenche se a pessoa ainda não escreveu nada dela
+    if (!ideia.value.trim() || ideia.value === ideiaAutomatica) {
+      ideiaAutomatica = preencher(contextoPedido.t.pedir_igual_ideia, { titulo });
+      ideia.value = ideiaAutomatica;
+    }
+    atualizarOpcoesPedido();
+    passoAtual = passosDoPedido().indexOf("ideia");
+    if (location.hash !== "#pedido") history.pushState(null, "", "#pedido");
+    irPara("pedido", true);
+    mostrarPasso(true);
+  }
+
   // as etapas mudam conforme o serviço: ref sheet não tem tamanho nem extras; stickers têm quantidade
   function passosDoPedido() {
     const s = servicoAtual();
@@ -461,6 +504,10 @@
       })
       .join("");
     $("#pedido-ideia").placeholder = t.pedido_ideia_exemplo || "";
+    const dicas = d.pedido?.referenciaDicas || [];
+    $("#dicas-ref").hidden = !dicas.length;
+    $("#dicas-ref-titulo").textContent = d.pedido?.referenciaTitulo || "";
+    $("#dicas-ref-lista").innerHTML = dicas.map((x) => `<li>${esc(x)}</li>`).join("");
     atualizarOpcoesPedido();
   }
 
@@ -653,6 +700,12 @@
       try { localStorage.setItem("moeda", moeda); } catch {}
       montar();
     }
+    const pedir = ev.target.closest("[data-pedir]");
+    if (pedir) {
+      ev.preventDefault();
+      const it = itensGaleria[Number(pedir.dataset.pedir)];
+      if (it) pedirIgual(it.obra, it.titulo);
+    }
     const filtroBotao = ev.target.closest("[data-filtro]");
     if (filtroBotao) { filtro = filtroBotao.dataset.filtro; aplicarFiltro(); }
   });
@@ -772,6 +825,7 @@
       $("#visor-titulo").textContent = item.titulo;
       $("#visor-legenda").textContent = [item.tipo, item.preco].filter(Boolean).join(" · ");
       $("#visor-contador").textContent = grupo.length > 1 ? `${atual + 1} / ${grupo.length}` : "";
+      $("#visor-pedir").hidden = !item.pedivel;
       $$(".visor-seta", visor).forEach((b) => (b.hidden = grupo.length < 2));
     };
 
@@ -799,6 +853,7 @@
       if (acao === "fechar" || ev.target === visor || ev.target.tagName === "FIGURE") visor.close();
       if (acao === "anterior") mostrar(atual - 1);
       if (acao === "proxima") mostrar(atual + 1);
+      if (acao === "pedir") { const item = grupo[atual]; visor.close(); pedirIgual(item.obra, item.titulo); }
     });
     visor.addEventListener("keydown", (ev) => {
       if (ev.key === "ArrowLeft") mostrar(atual - 1);

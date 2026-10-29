@@ -227,7 +227,16 @@
     "texto": "Escolha as opções e veja a estimativa na hora. No final, é só enviar o pedido pronto pelo Telegram ou copiar e colar onde preferir.",
     "pagamento": "",
     "maxExtras": 0,
-    "telegram": "https://t.me/benndyTaxis"
+    "telegram": "https://t.me/benndyTaxis",
+    "referenciaTitulo": "Como mandar sua referência",
+    "referenciaDicas": [
+      "Mande imagens do personagem de frente e de costas (um ref sheet é o ideal).",
+      "Inclua a paleta de cores ou diga quais são as cores principais.",
+      "Avise os detalhes que não podem faltar: cicatrizes, tatuagens, piercings, acessórios.",
+      "Se tiver uma pose ou expressão em mente, mande um exemplo (foto, desenho ou print serve).",
+      "Para o fundo, diga o lugar e o clima: dia, noite, chuva, neon…",
+      "Pode mandar tudo pelo Telegram junto com o pedido: imagem, link do Pinterest ou do Toyhouse."
+    ]
   },
   "avisos": {
     "titulo": "Avisos importantes",

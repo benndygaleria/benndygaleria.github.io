@@ -34,6 +34,9 @@
       "pergunta_servico": "O que você quer?",
       "pergunta_tamanho": "Qual tamanho?",
       "pergunta_extras": "Algum extra?",
+      "pedir_igual": "Quero um assim",
+      "pedir_igual_aria": "Pedir uma arte como {titulo}",
+      "pedir_igual_ideia": "Quero algo no estilo da arte “{titulo}” da galeria. Meu personagem é…",
       "tam_icon": "Rosto e ombros",
       "tam_half": "Da cintura para cima",
       "tam_full": "Corpo inteiro",
@@ -144,6 +147,9 @@
       "pergunta_servico": "What do you want?",
       "pergunta_tamanho": "Which size?",
       "pergunta_extras": "Any extras?",
+      "pedir_igual": "I want one like this",
+      "pedir_igual_aria": "Order art like {titulo}",
+      "pedir_igual_ideia": "I'd like something in the style of “{titulo}” from the gallery. My character is…",
       "tam_icon": "Face and shoulders",
       "tam_half": "Waist up",
       "tam_full": "Whole body",
@@ -254,6 +260,9 @@
       "pergunta_servico": "¿Qué quieres?",
       "pergunta_tamanho": "¿Qué tamaño?",
       "pergunta_extras": "¿Algún extra?",
+      "pedir_igual": "Quiero uno así",
+      "pedir_igual_aria": "Pedir un arte como {titulo}",
+      "pedir_igual_ideia": "Quiero algo al estilo del arte “{titulo}” de la galería. Mi personaje es…",
       "tam_icon": "Cara y hombros",
       "tam_half": "De la cintura para arriba",
       "tam_full": "Cuerpo entero",
@@ -399,7 +408,16 @@
       "pedido": {
         "etiqueta": "Build your order",
         "titulo": "How much would your art cost?",
-        "texto": "Pick the options and see the estimate right away. When you're done, send the ready-made order on Telegram or copy and paste it wherever you like."
+        "texto": "Pick the options and see the estimate right away. When you're done, send the ready-made order on Telegram or copy and paste it wherever you like.",
+        "referenciaTitulo": "How to send your reference",
+        "referenciaDicas": [
+          "Send images of the character from the front and back (a ref sheet is ideal).",
+          "Include the color palette or tell me the main colors.",
+          "Mention details that can't be missed: scars, tattoos, piercings, accessories.",
+          "If you have a pose or expression in mind, send an example (a photo, drawing or screenshot works).",
+          "For the background, tell me the place and the mood: day, night, rain, neon…",
+          "You can send everything on Telegram along with your order: images, Pinterest or Toyhouse links."
+        ]
       },
       "avisos": {
         "titulo": "Important notes",
@@ -484,7 +502,16 @@
       "pedido": {
         "etiqueta": "Arma tu pedido",
         "titulo": "¿Cuánto costaría tu arte?",
-        "texto": "Elige las opciones y mira la estimación al instante. Al final, envía el pedido listo por Telegram o cópialo y pégalo donde prefieras."
+        "texto": "Elige las opciones y mira la estimación al instante. Al final, envía el pedido listo por Telegram o cópialo y pégalo donde prefieras.",
+        "referenciaTitulo": "Cómo enviar tu referencia",
+        "referenciaDicas": [
+          "Envía imágenes del personaje de frente y de espaldas (una ref sheet es lo ideal).",
+          "Incluye la paleta de colores o dime cuáles son los colores principales.",
+          "Avisa los detalles que no pueden faltar: cicatrices, tatuajes, piercings, accesorios.",
+          "Si tienes una pose o expresión en mente, envía un ejemplo (foto, dibujo o captura sirve).",
+          "Para el fondo, dime el lugar y el ambiente: día, noche, lluvia, neón…",
+          "Puedes enviar todo por Telegram junto con el pedido: imágenes, enlaces de Pinterest o Toyhouse."
+        ]
       },
       "avisos": {
         "titulo": "Avisos importantes",

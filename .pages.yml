@@ -134,8 +134,10 @@ content:
           - { name: titulo, label: Título, type: string }
           - { name: texto, label: Texto, type: text }
           - { name: pagamento, label: "Formas de pagamento (aparece no resumo; vazio = não aparece)", type: string }
-          - { name: maxExtras, label: "Máximo de OCs extras (0 = sem limite)", type: number }
+          - { name: maxExtras, label: "Máximo de personagens extras (0 = sem limite)", type: number }
           - { name: telegram, label: "Link do Telegram que recebe os pedidos", type: string }
+          - { name: referenciaTitulo, label: "Título das dicas de referência", type: string }
+          - { name: referenciaDicas, label: "Dicas de como mandar a referência (uma por linha)", type: string, list: true }
 
       - name: avisos
         label: Avisos
