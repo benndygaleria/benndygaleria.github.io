@@ -229,6 +229,27 @@
 
   /* ---------------- preços: quadro de cardápio ---------------- */
 
+  // bonequinho que mostra quanto do corpo entra em cada tamanho (Icon, Half body, Full body)
+  let cortes = 0;
+  function corteDoTamanho(tipo) {
+    const id = normalizar(tipo);
+    if (id.includes("icon")) return { altura: 31, dica: "tam_icon" };
+    if (id.includes("half")) return { altura: 52, dica: "tam_half" };
+    if (id.includes("full")) return { altura: 84, dica: "tam_full" };
+    return null;
+  }
+  function boneco(tipo) {
+    const c = corteDoTamanho(tipo);
+    if (!c) return "";
+    const id = `corte-${++cortes}`;
+    return `<svg class="boneco" viewBox="0 0 40 84" aria-hidden="true">
+      <clipPath id="${id}"><rect width="40" height="${c.altura}"/></clipPath>
+      <use href="#boneco" class="boneco-fora"/>
+      <use href="#boneco" clip-path="url(#${id})"/>
+      <rect class="boneco-corte" x="1" y="1" width="38" height="${c.altura - 2}"/>
+    </svg>`;
+  }
+
   let itensPrecos = [];   // fotos de exemplo dos estilos e serviços, para o visor
 
   function montarPrecos(d, t) {
@@ -260,11 +281,12 @@
     estilos.forEach((e, i) => (e.itens || []).forEach((it, j) => {
       if (!tamanhos.some((x) => x.id === normalizar(it.tipo))) tamanhos.push({ id: normalizar(it.tipo), nome: nomes[i].itens[j].tipo });
     }));
+    const BASE_TIPO = (id) => estilos.flatMap((e) => e.itens || []).find((it) => normalizar(it.tipo) === id)?.tipo || id;
     const celula = (item, extra = "") => (item ? `<td><small>${esc(MOEDAS[moeda])}</small>${esc(preco(item))}${extra}</td>` : `<td class="vazio">—</td>`);
     $("#tabela-precos").innerHTML = `
       <thead><tr><th scope="col"><span class="so-leitor">${esc(t.pedido_tamanho)}</span></th>${cabeca}</tr></thead>
       <tbody>${tamanhos
-        .map((tam) => `<tr><th scope="row">${esc(tam.nome)}</th>${estilos.map((e) => celula((e.itens || []).find((it) => normalizar(it.tipo) === tam.id))).join("")}</tr>`)
+        .map((tam) => `<tr><th scope="row"><span class="tamanho-linha">${boneco(BASE_TIPO(tam.id))}<span>${esc(tam.nome)}${corteDoTamanho(BASE_TIPO(tam.id)) ? `<small>${esc(t[corteDoTamanho(BASE_TIPO(tam.id)).dica] || "")}</small>` : ""}</span></span></th>${estilos.map((e) => celula((e.itens || []).find((it) => normalizar(it.tipo) === tam.id))).join("")}</tr>`)
         .join("")}</tbody>`;
 
     // adicionais: uma linha por adicional, com o preço em cada estilo
@@ -453,7 +475,7 @@
     $("#opcoes-tamanho").innerHTML = itens
       .map((it, i) => `<label class="pilula" for="tamanho-${i}">
           <input type="radio" name="tamanho" id="tamanho-${i}" value="${i}"${i === pedido.tamanho ? " checked" : ""}>
-          <span>${esc(s.d.itens[i].tipo)}</span><small>${esc(dinheiro(preco(it)))}</small>
+          ${boneco(it.tipo)}<span>${esc(s.d.itens[i].tipo)}</span><small>${esc(dinheiro(preco(it)))}</small>
         </label>`)
       .join("");
 
