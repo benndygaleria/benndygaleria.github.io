@@ -99,6 +99,12 @@
         "adulto": true
       },
       {
+        "imagem": "imagens/ref-benndy.jpg",
+        "titulo": "Ref sheet: Benndy",
+        "descricao": "Ficha de referência do Benndy: personagem verde de cabelo laranja volumoso, chapéu branco, calça jeans, cinto de fivela dourada, botas pretas enormes e rabo pontudo, visto de frente e de costas, com paleta de cores e estudos de expressões",
+        "estilo": "Ref sheet"
+      },
+      {
         "imagem": "imagens/sketch-apaixonado.jpg",
         "titulo": "Suspiro apaixonado",
         "descricao": "Personagem canino de pelo marrom e juba preta longa com trança, sentado num banquinho com o queixo apoiado na mão, olhando para cima com corações vermelhos em volta, num fundo rosa",
@@ -198,7 +204,7 @@
       {
         "nome": "Ref sheet",
         "descricao": "Ficha de referência completa do seu personagem.",
-        "imagem": "",
+        "imagem": "imagens/ref-benndy.jpg",
         "brl": 100,
         "usd": 80,
         "porUnidade": false,
