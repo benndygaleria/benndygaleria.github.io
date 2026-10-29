@@ -23,6 +23,11 @@
     "imagem": "",
     "imagemDescricao": ""
   },
+  "casal": {
+    "imagem": "",
+    "legenda": "Benndy & Mivie",
+    "descricao": "Benndy e o namorado Mivie, um gato lilás de gravata-borboleta, voando juntos numa vassoura e trocando olhares apaixonados"
+  },
   "galeria": {
     "etiqueta": "Trabalhos · 2026",
     "titulo": "Algumas artes…",
@@ -45,6 +50,27 @@
         "tamanho": "",
         "ocsExtras": 0,
         "adicionais": []
+      },
+      {
+        "imagem": "imagens/stickers-crocodilo.jpg",
+        "titulo": "Stickers: crocodilo listrado",
+        "descricao": "Pack com 6 stickers de um crocodilo vermelho com listras pretas em poses diferentes, um deles segurando uma lata de cerveja, sobre fundo vermelho",
+        "estilo": "Pack de stickers",
+        "quantidade": 6
+      },
+      {
+        "imagem": "imagens/stickers-coelho.jpg",
+        "titulo": "Stickers: Absolute Barotrauma",
+        "descricao": "Pack com 3 stickers de uma personagem de orelhas longas e pelo preto estrelado com branco, um com o texto Absolute Barotrauma e outro com Kiss Kiss, sobre fundo azul petróleo",
+        "estilo": "Pack de stickers",
+        "quantidade": 3
+      },
+      {
+        "imagem": "imagens/stickers-piscina.jpg",
+        "titulo": "Stickers: dia de piscina",
+        "descricao": "Pack com 5 stickers de uma criatura aquática cinza, vermelha e preta com nadadeiras laranja na piscina: mandando coração, tomando cerveja na borda, mergulhando, boiando triste e comendo um peixe com o balão Canibalismo",
+        "estilo": "Pack de stickers",
+        "quantidade": 5
       }
     ]
   },
@@ -116,7 +142,7 @@
       {
         "nome": "Pack de stickers",
         "descricao": "Stickers do seu personagem. O preço é por sticker, então o pack fica do tamanho que você quiser.",
-        "imagem": "",
+        "imagem": "imagens/stickers-crocodilo.jpg",
         "brl": 10,
         "usd": 5,
         "porUnidade": true,

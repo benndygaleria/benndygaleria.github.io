@@ -107,3 +107,13 @@ python -m http.server 8000
 ```
 
 Depois acesse `http://localhost:8000`.
+
+---
+
+## Como o site está organizado
+
+O site funciona como um app com 4 abas: **Galeria** (abre primeiro), **Preços**, **Pedido** (passo a passo) e **Sobre**. No computador as abas ficam na coluna da esquerda; no celular, numa barra embaixo.
+
+- **Galeria:** as artes de `"galeria" → "obras"`. Os botões de filtro aparecem sozinhos, um para cada estilo que tiver arte.
+- **Preços:** o quadro é montado com a tabela de `"precos"`. A `"imagem"` de cada estilo vira a fotinho redonda no topo da coluna.
+- **Casal (Benndy e Mivie):** coloque o recorte sem fundo (PNG) em `imagens/` e preencha `"casal" → "imagem"`. Ele aparece no pé da coluna da esquerda e na aba Sobre.

@@ -1,15 +1,15 @@
 /* ============================================================
    BenndyGaleria · script
    Lê o conteudo.json (português) e o traducoes.json (inglês e
-   espanhol) e monta a página. Para trocar textos, preços ou
-   imagens, edite os JSON; aqui não precisa mexer.
+   espanhol) e monta o site: 4 abas (Galeria, Preços, Pedido e
+   Sobre), o mural com filtros, o quadro de preços e o pedido
+   passo a passo. Para trocar textos, preços ou imagens, edite
+   os JSON; aqui não precisa mexer.
    ============================================================ */
 
 (() => {
   const $ = (seletor, raiz = document) => raiz.querySelector(seletor);
   const $$ = (seletor, raiz = document) => [...raiz.querySelectorAll(seletor)];
-  const semMovimento = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const mouseFino = matchMedia("(pointer: fine)").matches;
 
   const esc = (texto) =>
     String(texto ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -33,9 +33,6 @@
     return extra;
   };
 
-  // pétala (a mesma do cabelo do personagem): usada como marcador em listas e na faixa
-  const PETALA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1C18 5 20 13 12 23 4 13 6 5 12 1Z"/></svg>';
-
   const ICONES = {
     telegram: '<path d="M21.5 3.5 2.8 10.7c-.9.4-.9 1.6 0 1.9l4.6 1.6 1.8 5.6c.3.8 1.3 1 1.9.4l2.6-2.5 4.6 3.4c.7.5 1.6.1 1.8-.7L22.9 4.9c.2-1-.6-1.8-1.4-1.4Z"/><path d="m7.4 14.2 10-7.2-7.6 8.4"/>',
     instagram: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r=".6" fill="currentColor"/>',
@@ -43,19 +40,10 @@
     x: '<path d="M4 4h4.6L20 20h-4.6Z"/><path d="m19.6 4-6.7 7.3M4.4 20l6.7-7.3"/>',
     padrao: '<path d="M10 14 21 3M15 3h6v6"/><path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"/>'
   };
+  const icone = (r) => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONES[normalizar(r.icone || r.nome)] || ICONES.padrao}</svg>`;
 
-  // Quanto da figura cada tamanho mostra (em uma figura de 40 de altura)
-  const CORTES = { icon: 15, headshot: 15, busto: 26, halfbody: 26, fullbody: 40 };
-  const iconeCorte = (tipo) => {
-    const altura = CORTES[normalizar(tipo)];
-    if (!altura) return "";
-    return `<svg class="icone-corte" viewBox="0 0 24 40" aria-hidden="true">
-      <circle class="corpo" cx="12" cy="7" r="4.3"/>
-      <path class="corpo" d="M5.5 26V17.5Q5.5 12.6 12 12.6T18.5 17.5V26Z"/>
-      <path class="pernas" d="M9 26v12M15 26v12"/>
-      <rect class="corte" x="1" y="1" width="22" height="${altura - 2}" rx="2.5"/>
-    </svg>`;
-  };
+  // cor de cada estilo no quadro de preços (na ordem da tabela)
+  const CORES = ["var(--laranja)", "var(--roxo)", "var(--verde)", "var(--amarelo)", "var(--azul)"];
 
   /* ---------------- idioma e moeda ---------------- */
 
@@ -136,13 +124,242 @@
     return null;
   }
 
-  /* ---------------- monte seu pedido ---------------- */
+  // nome de um estilo ou serviço (escrito em português no conteudo.json) no idioma atual
+  function nomeServico(nomeBase, d) {
+    const p = BASE.precos || {};
+    const i = (p.estilos || []).findIndex((e) => normalizar(e.nome) === normalizar(nomeBase));
+    if (i >= 0) return d.precos.estilos[i].nome;
+    const j = (p.outros || []).findIndex((o) => normalizar(o.nome) === normalizar(nomeBase));
+    if (j >= 0) return d.precos.outros[j].nome;
+    return nomeBase;
+  }
+
+  // texto do preço de uma obra: "≈ R$ 15", "a partir de R$ 50" (preço manual) ou "sob consulta"
+  function textoPreco(est, t) {
+    if (est?.manual) {
+      const numero = String(est.manual).trim();
+      return /^\d+([.,]\d+)?$/.test(numero) ? `${t.a_partir_de} ${dinheiro(numero)}` : est.manual;
+    }
+    return est ? `≈ ${dinheiro(est.total)}` : t.sob_consulta;
+  }
+
+  /* ---------------- logo em letras recortadas ---------------- */
+
+  // a parte depois da 2ª maiúscula ("Galeria") vira a fita embaixo das letras
+  function montarLogo(nome) {
+    const corte = nome.slice(1).search(/[A-ZÀ-Ý]/) + 1;
+    const letras = corte > 0 ? nome.slice(0, corte) : nome;
+    const resto = corte > 0 ? nome.slice(corte) : "";
+    $("#logo").innerHTML =
+      `<span class="so-leitor">${esc(nome)}</span>` +
+      [...letras].map((l) => `<span class="letra" aria-hidden="true">${esc(l)}</span>`).join("") +
+      (resto ? `<span class="logo-fita" aria-hidden="true">${esc(resto)}</span>` : "");
+  }
+
+  /* ---------------- galeria: mural com filtros ---------------- */
+
+  let filtro = "todos";
+  let itensGaleria = [];   // dados de cada obra para o visor
+
+  function montarGaleria(d, t) {
+    const obras = d.galeria?.obras || [];
+    const categorias = [];
+    itensGaleria = obras.map((o, i) => {
+      const base = BASE.galeria.obras[i] || o;
+      const cat = normalizar(base.estilo);
+      if (cat && !categorias.some((c) => c.id === cat)) categorias.push({ id: cat, nome: nomeServico(base.estilo, d), qtd: 0 });
+      const c = categorias.find((x) => x.id === cat);
+      if (c) c.qtd++;
+      // "Sketch · Full body" ou "Pack de stickers · 6 stickers"
+      const q = Number(base.quantidade) || 0;
+      const outro = (BASE.precos?.outros || []).find((x) => normalizar(x.nome) === cat);
+      const iOutro = (BASE.precos?.outros || []).indexOf(outro);
+      const unidade = iOutro >= 0 ? d.precos.outros[iOutro].unidade : "";
+      const detalhe = q && unidade ? `${q} ${unidade}${q > 1 ? "s" : ""}` : o.tamanho;
+      const tipo = [base.estilo ? nomeServico(base.estilo, d) : "", detalhe].filter(Boolean).join(" · ");
+      return { cat, src: o.imagem, titulo: o.titulo, alt: o.descricao || o.titulo, tipo, preco: textoPreco(estimar(base, d), t) };
+    });
+    if (filtro !== "todos" && !categorias.some((c) => c.id === filtro)) filtro = "todos";
+
+    // filtros só aparecem quando há mais de um estilo na galeria
+    $("#filtros").hidden = categorias.length < 2;
+    $("#filtros").innerHTML = [{ id: "todos", nome: t.filtro_todos, qtd: obras.length }, ...categorias]
+      .map((c) => `<button type="button" data-filtro="${esc(c.id)}" aria-pressed="${c.id === filtro}">${esc(c.nome)} <small>${c.qtd}</small></button>`)
+      .join("");
+
+    const a = d.artista || {};
+    const capa = `
+      <article class="capa" data-cat="todos">
+        <div class="capa-arte">
+          <img src="${esc(a.imagem)}" alt="${esc(a.imagemDescricao)}" fetchpriority="high">
+          <span class="capa-adesivo" aria-hidden="true">${esc(t.adesivo)}</span>
+        </div>
+        <div class="capa-texto">
+          <p class="capa-descricao">${esc(a.descricao)}</p>
+          <p class="capa-detalhe">${esc(a.detalhe)}</p>
+          <div class="capa-botoes">
+            <a class="botao" href="#precos">${esc(t.ver_precos)}</a>
+            <a class="botao botao-contorno" href="#pedido">${esc(t.fazer_pedido)}</a>
+          </div>
+        </div>
+      </article>`;
+
+    $("#mural").innerHTML = capa + itensGaleria
+      .map((it, i) => `
+      <figure class="peca" data-cat="${esc(it.cat)}">
+        <button class="peca-botao" type="button" data-grupo="galeria" data-indice="${i}" aria-label="${esc(preencher(t.ampliar_aria, { titulo: it.titulo }))}">
+          <img src="${esc(it.src)}" alt="${esc(it.alt)}" loading="lazy" decoding="async">
+          <span class="peca-legenda">
+            <span class="peca-titulo">${esc(it.titulo)}</span>
+            <span class="peca-meta">${it.tipo ? `<span class="peca-estilo">${esc(it.tipo)}</span>` : ""}<b>${esc(it.preco)}</b></span>
+          </span>
+        </button>
+      </figure>`)
+      .join("");
+    aplicarFiltro();
+  }
+
+  function aplicarFiltro() {
+    $$("#filtros button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.filtro === filtro)));
+    $$("#mural > [data-cat]").forEach((el) => {
+      el.hidden = filtro !== "todos" && el.dataset.cat !== filtro;
+    });
+  }
+
+  /* ---------------- preços: quadro de cardápio ---------------- */
+
+  let itensPrecos = [];   // fotos de exemplo dos estilos e serviços, para o visor
+
+  function montarPrecos(d, t) {
+    const estilos = BASE.precos?.estilos || [];
+    const nomes = d.precos?.estilos || [];
+    itensPrecos = [];
+    const foto = (img, nome, cor) => {
+      if (!img) return "";
+      itensPrecos.push({ src: img, titulo: nome, alt: preencher(t.tabela_alt, { nome }), tipo: "", preco: "" });
+      return `<button class="estilo-foto" type="button" data-grupo="precos" data-indice="${itensPrecos.length - 1}" aria-label="${esc(preencher(t.ver_tabela_aria, { nome }))}"${cor ? ` style="--cor:${cor}"` : ""}><img src="${esc(img)}" alt="" loading="lazy"></button>`;
+    };
+
+    // cabeçalho: um estilo por coluna
+    const cabeca = estilos
+      .map((e, i) => {
+        const menor = Math.min(...(e.itens || []).map(preco));
+        const cor = CORES[i % CORES.length];
+        return `<th scope="col" style="--cor:${cor}"><div class="estilo-cabeca">
+          ${foto(e.imagem, nomes[i].nome, cor)}
+          <span class="estilo-nome">${esc(nomes[i].nome)}</span>
+          ${isFinite(menor) ? `<span class="estilo-desde">${esc(t.a_partir_de)} ${esc(dinheiro(menor))}</span>` : ""}
+          <span class="estilo-desc">${esc(nomes[i].descricao)}</span>
+        </div></th>`;
+      })
+      .join("");
+
+    // linhas: os tamanhos de todos os estilos, na ordem em que aparecem
+    const tamanhos = [];
+    estilos.forEach((e, i) => (e.itens || []).forEach((it, j) => {
+      if (!tamanhos.some((x) => x.id === normalizar(it.tipo))) tamanhos.push({ id: normalizar(it.tipo), nome: nomes[i].itens[j].tipo });
+    }));
+    const celula = (item, extra = "") => (item ? `<td><small>${esc(MOEDAS[moeda])}</small>${esc(preco(item))}${extra}</td>` : `<td class="vazio">—</td>`);
+    $("#tabela-precos").innerHTML = `
+      <thead><tr><th scope="col"><span class="so-leitor">${esc(t.pedido_tamanho)}</span></th>${cabeca}</tr></thead>
+      <tbody>${tamanhos
+        .map((tam) => `<tr><th scope="row">${esc(tam.nome)}</th>${estilos.map((e) => celula((e.itens || []).find((it) => normalizar(it.tipo) === tam.id))).join("")}</tr>`)
+        .join("")}</tbody>`;
+
+    // adicionais: uma linha por adicional, com o preço em cada estilo
+    const extras = [];
+    estilos.forEach((e, i) => (e.adicionais || []).forEach((a, j) => {
+      if (!extras.some((x) => x.id === normalizar(a.nome))) extras.push({ id: normalizar(a.nome), nome: nomes[i].adicionais?.[j]?.nome ?? a.nome });
+    }));
+    const caixaExtras = $("#tabela-extras").closest(".rolagem");
+    caixaExtras.hidden = !extras.length;
+    caixaExtras.previousElementSibling.hidden = !extras.length;
+    $("#tabela-extras").innerHTML = `
+      <thead><tr><th scope="col"><span class="so-leitor">${esc(t.adicionais)}</span></th>${estilos.map((e, i) => `<th scope="col" style="--cor:${CORES[i % CORES.length]}"><span class="estilo-nome">${esc(nomes[i].nome)}</span></th>`).join("")}</tr></thead>
+      <tbody>${extras
+        .map((ex) => `<tr><th scope="row">+ ${esc(ex.nome)}</th>${estilos.map((e) => {
+          const a = (e.adicionais || []).find((x) => normalizar(x.nome) === ex.id);
+          return celula(a, a?.porUnidade ? `<em>${esc(t.cada)}</em>` : "");
+        }).join("")}</tr>`)
+        .join("")}</tbody>`;
+
+    // mais serviços: etiquetas de preço
+    const outros = BASE.precos?.outros || [];
+    $("#outros").hidden = !outros.length;
+    $("#outros-lista").innerHTML = outros
+      .map((o, i) => {
+        const nome = d.precos.outros[i].nome;
+        return `<article class="etiqueta-preco">
+          ${o.imagem ? foto(o.imagem, nome).replace("estilo-foto", "etiqueta-foto") : ""}
+          <div><h4 class="etiqueta-nome">${esc(nome)}</h4><p class="etiqueta-desc">${esc(d.precos.outros[i].descricao)}</p></div>
+          <p class="etiqueta-valor"><small>${esc(MOEDAS[moeda])}</small>${esc(preco(o))}${o.porUnidade ? `<em>${esc(preencher(t.por_unidade, { unidade: d.precos.outros[i].unidade }))}</em>` : ""}</p>
+        </article>`;
+      })
+      .join("");
+
+    // avisos (só aparecem quando o artista preencher)
+    const regras = d.avisos?.lista || [];
+    const naoFaco = d.avisos?.naoFaco || [];
+    $("#avisos").hidden = !regras.length && !naoFaco.length;
+    $("#regras").hidden = !regras.length;
+    $("#regras").innerHTML = regras.map((r) => `<div${r.destaque ? ' class="regra-destaque"' : ""}><dt>${esc(r.titulo)}</dt><dd>${esc(r.texto)}</dd></div>`).join("");
+    $("#nao-faco-quadro").hidden = !naoFaco.length;
+    $("#nao-faco").innerHTML = naoFaco.map((n) => `<li>${esc(n)}</li>`).join("");
+    $("#pedido-nao-faco").hidden = !naoFaco.length;
+    $("#pedido-nao-faco-lista").innerHTML = naoFaco.map((n) => `<li>${esc(n)}</li>`).join("");
+  }
+
+  /* ---------------- sobre ---------------- */
+
+  function montarSobre(d, t) {
+    const sobre = d.sobre || {};
+    const paragrafos = Array.isArray(sobre.texto) ? sobre.texto : [sobre.texto].filter(Boolean);
+    $("#sobre-paragrafos").innerHTML = paragrafos.map((p) => `<p>${esc(p)}</p>`).join("");
+    $("#sobre-destaques").innerHTML = (sobre.destaques || []).map((x) => `<li>${esc(x)}</li>`).join("");
+
+    // a imagem do "Sobre" é a do campo sobre.imagem; sem ela, entra o recorte do casal
+    const casal = d.casal || {};
+    const img = sobre.imagem || casal.imagem;
+    const fotoSobre = $("#sobre-imagem");
+    $("#sobre-foto").hidden = !img;
+    if (img && fotoSobre.getAttribute("src") !== img) fotoSobre.src = img;
+    fotoSobre.alt = sobre.imagem ? sobre.imagemDescricao || "" : casal.descricao || "";
+    $("#sobre-legenda").textContent = sobre.imagem ? "" : casal.legenda || "";
+
+    // o casal também fica colado no pé da lombada
+    $("#lombada-casal").hidden = !casal.imagem;
+    const imgCasal = $("#lombada-casal-imagem");
+    if (casal.imagem && imgCasal.getAttribute("src") !== casal.imagem) imgCasal.src = casal.imagem;
+    imgCasal.alt = casal.descricao || "";
+
+    const video = $("#video");
+    $("#processo").hidden = !d.processo?.video;
+    if (d.processo?.video && !video.getAttribute("src")) video.src = d.processo.video;
+
+    const perguntas = d.faq?.perguntas || [];
+    $("#faq").hidden = !perguntas.length;
+    $("#faq-lista").innerHTML = perguntas.map((p) => `<div><dt>${esc(p.pergunta)}</dt><dd>${esc(p.resposta)}</dd></div>`).join("");
+
+    const redes = d.contato?.redes || [];
+    $("#redes").innerHTML = redes
+      .map((r) => `<li><a href="${esc(r.url)}" target="_blank" rel="noopener">
+          <span class="rede-icone">${icone(r)}</span>
+          <span><span class="rede-nome">${esc(r.nome)}</span><span class="rede-usuario">${esc(r.usuario)}</span></span>
+        </a></li>`)
+      .join("");
+    $("#lombada-redes").innerHTML = redes
+      .map((r) => `<li><a href="${esc(r.url)}" target="_blank" rel="noopener" aria-label="${esc(`${r.nome} ${r.usuario}`)}" title="${esc(r.nome)}">${icone(r)}</a></li>`)
+      .join("");
+  }
+
+  /* ---------------- pedido passo a passo ---------------- */
 
   // servico: "e0", "e1"... (estilos) ou "o0", "o1"... (mais serviços)
   // adicionais: { nome normalizado: quantidade } (vale entre estilos, então "Background" continua marcado ao trocar de estilo)
   const pedido = { servico: null, tamanho: 0, adicionais: {}, quantidade: 1 };
+  let passoAtual = 0;
   let contextoPedido = null;   // { d, t } do idioma atual
-  let totalMostrado = null;
+  const ROTULOS_PASSO = { servico: "passo_servico", tamanho: "passo_tamanho", extras: "passo_extras", ideia: "passo_ideia", revisao: "passo_revisao" };
 
   function servicos(d) {
     return [
@@ -151,6 +368,15 @@
     ];
   }
   const servicoAtual = () => servicos(contextoPedido.d).find((s) => s.chave === pedido.servico);
+
+  // as etapas mudam conforme o serviço: ref sheet não tem tamanho nem extras; stickers têm quantidade
+  function passosDoPedido() {
+    const s = servicoAtual();
+    const lista = ["servico"];
+    if (s?.estilo && (s.base.itens || []).length) lista.push("tamanho");
+    if (s && (s.estilo ? (s.base.adicionais || []).length : s.base.porUnidade)) lista.push("extras");
+    return [...lista, "ideia", "revisao"];
+  }
 
   // o pedido vira uma "obra" para usar a mesma conta da galeria
   function pedidoComoObra() {
@@ -166,9 +392,6 @@
     };
   }
 
-  const imagemOuVazio = (src, nome, classe) =>
-    src ? `<img src="${esc(src)}" alt="" loading="lazy" decoding="async">` : `<span class="${classe}" aria-hidden="true">${esc(nome)}</span>`;
-
   function contador(id, rotulo, dica, valor, min, max) {
     const { t } = contextoPedido;
     return `<div class="contador-linha" data-contador-caixa="${id}" data-min="${min}" data-max="${max}">
@@ -181,15 +404,19 @@
     </div>`;
   }
 
+  // máximo de personagens extras; 0 ou vazio = sem limite
+  function maxExtras() {
+    const max = Number(BASE.pedido?.maxExtras);
+    return max > 0 ? max : Infinity;
+  }
+
   function montarPedido(d, t) {
     contextoPedido = { d, t };
     const lista = servicos(d);
-    $("#pedido").hidden = !lista.length;
-    if (!lista.length) return;
-    if (!lista.some((s) => s.chave === pedido.servico)) pedido.servico = lista[0].chave;
+    if (!lista.some((s) => s.chave === pedido.servico)) pedido.servico = lista[0]?.chave;
 
     $("#opcoes-estilo").innerHTML = lista
-      .map((s) => {
+      .map((s, i) => {
         let valor;
         if (s.estilo) {
           const menor = Math.min(...(s.base.itens || []).map(preco));
@@ -197,9 +424,12 @@
         } else {
           valor = s.base.porUnidade ? `${dinheiro(preco(s.base))} ${preencher(t.por_unidade, { unidade: s.d.unidade })}` : dinheiro(preco(s.base));
         }
+        const img = s.base.imagem
+          ? `<img src="${esc(s.base.imagem)}" alt="" loading="lazy" decoding="async">`
+          : `<span class="opcao-estilo-vazio" aria-hidden="true">${esc(s.d.nome.slice(0, 1))}</span>`;
         return `<label class="opcao-estilo" for="servico-${s.chave}">
           <input type="radio" name="servico" id="servico-${s.chave}" value="${s.chave}"${s.chave === pedido.servico ? " checked" : ""}>
-          <span class="opcao-estilo-img">${imagemOuVazio(s.base.imagem, s.d.nome.slice(0, 1), "opcao-estilo-vazio")}</span>
+          <span class="opcao-estilo-img" style="--tom:${CORES[i % CORES.length]}">${img}</span>
           <span class="opcao-estilo-nome">${esc(s.d.nome)}</span>
           ${valor ? `<span class="opcao-estilo-preco">${esc(valor)}</span>` : ""}
         </label>`;
@@ -213,39 +443,62 @@
   function atualizarOpcoesPedido() {
     const { t } = contextoPedido;
     const s = servicoAtual();
+    if (!s) return;
     const itens = s.estilo ? s.base.itens || [] : [];
     const adicionais = s.estilo ? s.base.adicionais || [] : [];
-    // "mais serviços" não têm tamanho; o tamanho escolhido fica guardado para quando voltar a um estilo
     if (itens.length && pedido.tamanho >= itens.length) pedido.tamanho = 0;
 
-    $("#grupo-tamanho").hidden = !itens.length;
     $("#opcoes-tamanho").innerHTML = itens
       .map((it, i) => `<label class="pilula" for="tamanho-${i}">
           <input type="radio" name="tamanho" id="tamanho-${i}" value="${i}"${i === pedido.tamanho ? " checked" : ""}>
-          ${iconeCorte(it.tipo)}<span>${esc(s.d.itens[i].tipo)}</span><small>${esc(dinheiro(preco(it)))}</small>
+          <span>${esc(s.d.itens[i].tipo)}</span><small>${esc(dinheiro(preco(it)))}</small>
         </label>`)
       .join("");
 
-    $("#grupo-adicionais").hidden = !adicionais.length;
     $("#opcoes-adicionais").innerHTML = adicionais
       .map((a, j) => (a.porUnidade ? "" : `<label class="pilula" for="adicional-${j}">
           <input type="checkbox" name="adicional" id="adicional-${j}" value="${esc(normalizar(a.nome))}"${pedido.adicionais[normalizar(a.nome)] ? " checked" : ""}>
           <span>${esc(s.d.adicionais[j].nome)}</span><small>+ ${esc(dinheiro(preco(a)))}</small>
         </label>`))
       .join("");
-    const max = maxExtras();
     $("#contadores-adicionais").innerHTML = adicionais
-      .map((a, j) => (a.porUnidade ? contador(`a:${normalizar(a.nome)}`, s.d.adicionais[j].nome, `+ ${dinheiro(preco(a))} ${t.cada}`, pedido.adicionais[normalizar(a.nome)] || 0, 0, max) : ""))
+      .map((a, j) => (a.porUnidade ? contador(`a:${normalizar(a.nome)}`, s.d.adicionais[j].nome, `+ ${dinheiro(preco(a))} ${t.cada}`, pedido.adicionais[normalizar(a.nome)] || 0, 0, maxExtras()) : ""))
       .join("");
 
     const porUnidade = !s.estilo && s.base.porUnidade;
-    $("#grupo-quantidade").hidden = !porUnidade;
     if (!porUnidade) pedido.quantidade = 1;
     $("#contador-quantidade").innerHTML = porUnidade
       ? contador("quantidade", preencher(t.pedido_qtd_rotulo, { unidade: s.d.unidade }), `${dinheiro(preco(s.base))} ${t.cada}`, pedido.quantidade, 1, Infinity)
       : "";
 
     atualizarResumo();
+    mostrarPasso(false);
+  }
+
+  function mostrarPasso(focar) {
+    const { t } = contextoPedido;
+    const lista = passosDoPedido();
+    passoAtual = Math.max(0, Math.min(passoAtual, lista.length - 1));
+    const atual = lista[passoAtual];
+    $$("#pedido-form [data-passo]").forEach((p) => (p.hidden = p.dataset.passo !== atual));
+    $('[data-passo="extras"] .passo-pergunta').textContent = servicoAtual()?.estilo ? t.pergunta_extras : t.pergunta_quantidade;
+
+    $("#passos").innerHTML = lista
+      .map((p, i) => {
+        const feito = i < passoAtual;
+        const rotulo = p === "extras" && !servicoAtual()?.estilo ? t.pedido_quantidade : t[ROTULOS_PASSO[p]];
+        return `<li><button type="button" data-ir-passo="${i}"${feito ? ' class="feito"' : ""}${i === passoAtual ? ' aria-current="step"' : ""}><span aria-hidden="true">${feito ? "✓" : i + 1}</span>${esc(rotulo)}</button></li>`;
+      })
+      .join("");
+    $("#passo-voltar").disabled = passoAtual === 0;
+    $("#passo-proximo").hidden = passoAtual === lista.length - 1;
+
+    if (focar) {
+      $(`#pedido-form [data-passo="${atual}"] .passo-pergunta`)?.focus({ preventScroll: true });
+      // no celular a pergunta pode ficar fora da tela: traz o assistente de volta
+      const caixa = $(".assistente").getBoundingClientRect();
+      if (caixa.top < 0) window.scrollBy({ top: caixa.top - 70, behavior: "smooth" });
+    }
   }
 
   function mensagemPedido(est) {
@@ -266,27 +519,15 @@
   }
 
   function atualizarResumo() {
-    const { d, t } = contextoPedido;
+    const { d } = contextoPedido;
     const est = estimar(pedidoComoObra(), d);
+    const total = `≈ ${dinheiro(est?.total ?? 0)}`;
 
     $("#resumo-linhas").innerHTML = (est?.partes || [])
       .map((p) => `<li><span>${esc(p.rotulo)}</span><b>${esc(dinheiro(p.valor))}</b></li>`)
       .join("");
-
-    // o total "conta" até o valor novo ("≈" deixa claro que o valor é aproximado)
-    const total = est?.total ?? 0;
-    const caixa = $("#resumo-total");
-    const primeiraVez = totalMostrado == null;
-    const de = totalMostrado ?? total, inicio = performance.now();
-    totalMostrado = total;
-    const passo = (agora) => {
-      // na primeira vez (ou com "menos movimento") o valor aparece direto, sem contar
-      const p = semMovimento || primeiraVez ? 1 : Math.min((agora - inicio) / 380, 1);
-      const valor = Math.round(de + (total - de) * (1 - Math.pow(1 - p, 3)));
-      caixa.textContent = `≈ ${dinheiro(valor)}`;
-      if (p < 1) requestAnimationFrame(passo);
-    };
-    passo(inicio);
+    $("#resumo-total").textContent = total;
+    $("#total-parcial").textContent = total;
 
     // mensagem pronta + link do Telegram
     const msg = mensagemPedido(est);
@@ -297,6 +538,7 @@
     if (telegram) botaoTelegram.href = `${telegram}${telegram.includes("?") ? "&" : "?"}text=${encodeURIComponent(msg)}`;
 
     $("#resumo-fechado").hidden = !!d.comissoes?.abertas;
+    $("#resumo-pagamento").hidden = !d.pedido?.pagamento;
   }
 
   // atualiza os números e os botões +/− sem redesenhar (assim o foco do teclado não se perde)
@@ -318,22 +560,15 @@
       await navigator.clipboard.writeText(msg);
       if (!silencioso) aviso.textContent = t.pedido_copiado;
     } catch {
-      // plano B: seleciona o texto da mensagem para a pessoa copiar
+      // plano B: abre a mensagem e seleciona o texto para a pessoa copiar
       if (silencioso) return;
-      const caixa = $(".resumo-mensagem");
-      caixa.open = true;
+      $(".resumo-mensagem").open = true;
       const faixa = document.createRange();
       faixa.selectNodeContents($("#pedido-mensagem"));
       getSelection().removeAllRanges();
       getSelection().addRange(faixa);
       aviso.textContent = document.execCommand?.("copy") ? t.pedido_copiado : t.pedido_copiar_erro;
     }
-  }
-
-  // máximo de personagens extras; 0 ou vazio = sem limite
-  function maxExtras() {
-    const max = Number(BASE.pedido?.maxExtras);
-    return max > 0 ? max : Infinity;
   }
 
   function ativarPedido() {
@@ -358,6 +593,12 @@
       atualizarResumo();
     });
     $("#pedido-ideia").addEventListener("input", () => atualizarResumo());
+    $("#passo-proximo").addEventListener("click", () => { passoAtual++; mostrarPasso(true); });
+    $("#passo-voltar").addEventListener("click", () => { passoAtual--; mostrarPasso(true); });
+    $("#passos").addEventListener("click", (ev) => {
+      const botao = ev.target.closest("[data-ir-passo]");
+      if (botao) { passoAtual = Number(botao.dataset.irPasso); mostrarPasso(true); }
+    });
     $("#pedido-copiar").addEventListener("click", () => copiarPedido());
     // ao abrir o Telegram, também copia (caso o app não preencha a mensagem sozinho)
     $("#pedido-telegram").addEventListener("click", () => copiarPedido(true));
@@ -379,18 +620,46 @@
 
   document.addEventListener("click", (ev) => {
     const botao = ev.target.closest("[data-moeda]");
-    if (!botao || botao.dataset.moeda === moeda) return;
-    moeda = botao.dataset.moeda;
-    moedaEscolhida = true;
-    try { localStorage.setItem("moeda", moeda); } catch {}
-    montar();
+    if (botao && botao.dataset.moeda !== moeda) {
+      moeda = botao.dataset.moeda;
+      moedaEscolhida = true;
+      try { localStorage.setItem("moeda", moeda); } catch {}
+      montar();
+    }
+    const filtroBotao = ev.target.closest("[data-filtro]");
+    if (filtroBotao) { filtro = filtroBotao.dataset.filtro; aplicarFiltro(); }
   });
+
+  /* ---------------- abas ---------------- */
+
+  const PAGINAS = ["galeria", "precos", "pedido", "sobre"];
+
+  // mostra uma aba e esconde as outras; o endereço (#precos, #pedido...) diz qual está aberta
+  function irPara(id, focar) {
+    if (!PAGINAS.includes(id)) return false;
+    $$("[data-pagina]").forEach((p) => (p.hidden = p.id !== id));
+    $$(".abas a").forEach((a) => (a.dataset.aba === id ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current")));
+    if (focar) {
+      window.scrollTo({ top: 0, behavior: "instant" });
+      const titulo = $(`#${id} .pagina-titulo`);
+      titulo.setAttribute("tabindex", "-1");
+      titulo.focus({ preventScroll: true });
+    }
+    return true;
+  }
+
+  addEventListener("hashchange", () => {
+    const id = location.hash.slice(1);
+    if (!irPara(id, true) && id === "principal") $("#principal").focus();
+  });
+  // clicar na aba que já está aberta volta para o topo dela
+  $$(".abas a, .logo a").forEach((a) => a.addEventListener("click", () => {
+    if (location.hash === a.getAttribute("href")) window.scrollTo({ top: 0, behavior: "smooth" });
+  }));
 
   /* ---------------- montagem ---------------- */
 
   let jaMontou = false;
-  let observadorNome = null;
-  let gruposVisor = { galeria: [], precos: [] };
 
   function montar() {
     const d = mesclar(BASE, idioma === "pt" ? null : TRAD.conteudo?.[idioma]);
@@ -401,7 +670,6 @@
     // textos fixos da interface
     $$("[data-i18n]").forEach((el) => { if (t[el.dataset.i18n] != null) el.textContent = t[el.dataset.i18n]; });
     $$("[data-i18n-aria]").forEach((el) => { if (t[el.dataset.i18nAria]) el.setAttribute("aria-label", t[el.dataset.i18nAria]); });
-    $("#video-quadro").dataset.rotulo = t.timelapse || "";
 
     // textos do conteúdo
     $$("[data-campo]").forEach((el) => {
@@ -426,214 +694,18 @@
     });
     $("#aviso-fechado").hidden = abertas;
 
-    // nome com letras animadas; a parte depois da 2ª maiúscula fica em destaque
-    const nome = d.artista?.nome || "";
-    if ($("#hero-nome").getAttribute("aria-label") !== nome) {
-      const corte = nome.slice(1).search(/[A-ZÀ-Ý]/) + 1;
-      $("#hero-nome").setAttribute("aria-label", nome);
-      $(".hero-nome-texto").innerHTML = [...nome]
-        .map((letra, i) => `<span class="letra${corte > 0 && i >= corte ? " destaque" : ""}" style="--i:${i}" aria-hidden="true">${letra === " " ? "&nbsp;" : esc(letra)}</span>`)
-        .join("");
-      // mede a largura real do nome para ele sempre caber na coluna
-      const medirNome = () => {
-        const h1 = $("#hero-nome");
-        const fonte = parseFloat(getComputedStyle(h1).fontSize);
-        const largura = $(".hero-nome-texto").offsetWidth;
-        if (fonte && largura) h1.style.setProperty("--razao", (largura / fonte).toFixed(3));
-      };
-      medirNome();
-      // mede de novo quando a fonte do título termina de carregar (o nome muda de largura)
-      if (!observadorNome && "ResizeObserver" in window) {
-        observadorNome = new ResizeObserver(medirNome);
-        observadorNome.observe($(".hero-nome-texto"));
-      }
-      document.fonts?.ready.then(medirNome);
-    }
-
-    const hero = $("#hero-imagem");
-    if (!hero.getAttribute("src")) hero.src = d.artista.imagem;
-    hero.alt = d.artista.imagemDescricao || "";
-
-    // fitas rolantes: uma com estilos, tamanhos e serviços, a outra com os @ das redes
-    const estilos = d.precos?.estilos || [];
-    const outros = d.precos?.outros || [];
-    const tipos = new Set();
-    estilos.forEach((e) => (e.itens || []).forEach((i) => tipos.add(i.tipo)));
-    const palavras = [...estilos.map((e) => e.nome), ...tipos, ...outros.map((o) => o.nome), t.faixa_mundo];
-    const redes = (d.contato?.redes || []).map((r) => (String(r.usuario).startsWith("@") ? r.usuario : r.nome));
-    const fita = (lista) => { const metade = Array(3).fill(lista).flat().map((p) => `<span>${esc(p)} ${PETALA}</span>`).join(""); return metade + metade; };
-    const [fitaA, fitaB] = $$(".faixa-trilho");
-    fitaA.innerHTML = fita(palavras);
-    fitaB.innerHTML = fita([...redes, t.faixa_feito]);
-    $("#cupom-data").textContent = new Date().toLocaleDateString(document.documentElement.lang);
-
-    // sobre
-    const sobre = d.sobre || {};
-    $("#sobre").hidden = !sobre.titulo;
-    const fotoSobre = $("#sobre-imagem");
-    if (sobre.imagem && fotoSobre.getAttribute("src") !== sobre.imagem) fotoSobre.src = sobre.imagem;
-    fotoSobre.alt = sobre.imagemDescricao || "";
-    $(".sobre-foto").hidden = !sobre.imagem;
-    const paragrafos = Array.isArray(sobre.texto) ? sobre.texto : [sobre.texto].filter(Boolean);
-    $("#sobre-paragrafos").innerHTML = paragrafos.map((p) => `<p>${esc(p)}</p>`).join("");
-    $("#sobre-destaques").innerHTML = (sobre.destaques || []).map((x) => `<li>${PETALA}${esc(x)}</li>`).join("");
-
-    // galeria com preço estimado (some do site enquanto não tiver artes)
-    const obras = d.galeria?.obras || [];
-    $("#trabalhos").hidden = !obras.length;
-    $("#galeria").innerHTML = obras
-      .map((o, i) => {
-        const est = estimar(BASE.galeria.obras[i] || o, d);
-        const tipo = [o.estilo, o.tamanho].filter(Boolean).join(" · ");
-        let etiqueta, conta = "";
-        if (est?.manual) {
-          // só o número (ex.: "50") vira "a partir de R$ 50"; um texto aparece do jeito que foi escrito
-          const numero = String(est.manual).trim();
-          const valor = /^\d+([.,]\d+)?$/.test(numero) ? `<small>${esc(t.a_partir_de)}</small> ${esc(dinheiro(numero))}` : esc(est.manual);
-          etiqueta = `<span class="estimativa-rotulo">${esc(t.estimativa)}</span><strong>${valor}</strong>`;
-        } else if (est) {
-          etiqueta = `<span class="estimativa-rotulo">${esc(t.estimativa)}</span><strong>≈ ${esc(dinheiro(est.total))}</strong>`;
-          conta = est.partes.map((p) => `<span>${esc(p.rotulo)} <b>${esc(dinheiro(p.valor))}</b></span>`).join('<i aria-hidden="true">+</i>');
-        } else {
-          etiqueta = `<span class="estimativa-rotulo">${esc(t.estimativa)}</span><strong>${esc(t.sob_consulta)}</strong>`;
-        }
-        // "o que foi feito" escrito na mão substitui a conta automática (sem valores separados)
-        const itens = (o.itens || []).filter(Boolean);
-        if (itens.length) conta = itens.map((it) => `<span>${esc(it)}</span>`).join('<i aria-hidden="true">+</i>');
-        return `
-      <figure class="obra revelar" style="transition-delay:${(i % 3) * 80}ms">
-        <button class="obra-botao" type="button" data-grupo="galeria" data-indice="${i}" data-rotulo="${esc(t.ampliar)}" aria-label="${esc(preencher(t.ampliar_aria, { titulo: o.titulo }))}">
-          <img src="${esc(o.imagem)}" alt="${esc(o.descricao || o.titulo)}" decoding="async">
-          <span class="obra-preco">${etiqueta}</span>
-        </button>
-        <figcaption>
-          <span class="obra-titulo">${esc(o.titulo)}</span>
-          ${tipo ? `<span class="obra-tipo">${esc(tipo)}</span>` : ""}
-          ${conta ? `<span class="obra-conta">${conta}</span>` : ""}
-        </figcaption>
-      </figure>`;
-      })
-      .join("");
-    // cada arte recebe a proporção dela, para as linhas terem a mesma altura
-    $$("#galeria img").forEach((img) => {
-      const medir = () => img.naturalWidth && img.closest(".obra").style.setProperty("--r", (img.naturalWidth / img.naturalHeight).toFixed(3));
-      img.complete ? medir() : img.addEventListener("load", medir, { once: true });
-    });
-
-    // vídeo do processo
-    const video = $("#video");
-    if (d.processo?.video) { $("#processo").hidden = false; if (!video.getAttribute("src")) video.src = d.processo.video; }
-    else $("#processo").hidden = true;
-    atualizarBotaoVideo = () => {
-      const botao = $("#video-botao");
-      botao.textContent = video.paused ? t.reproduzir_video : t.pausar_video;
-      botao.setAttribute("aria-pressed", String(video.paused));
-    };
-    atualizarBotaoVideo();
-
-    // legenda dos tamanhos
-    $("#legenda").innerHTML = [...tipos].map((x) => `<span>${iconeCorte(x)}${esc(x)}</span>`).join("");
-
-    // preços: cada estilo é um ingresso de show; só os que têm imagem abrem no visor
-    const tabelasComImagem = estilos.filter((e) => e.imagem);
-    $("#lista-precos").innerHTML = estilos
-      .map((e, i) => {
-        const base = BASE.precos.estilos[i];
-        const menor = Math.min(...(base.itens || []).map(preco));
-        const imagem = e.imagem
-          ? `<button class="ingresso-img" type="button" data-grupo="precos" data-indice="${tabelasComImagem.indexOf(e)}" aria-label="${esc(preencher(t.ver_tabela_aria, { nome: e.nome }))}">
-              <img src="${esc(e.imagem)}" alt="${esc(preencher(t.tabela_alt, { nome: e.nome }))}" loading="lazy" decoding="async">
-            </button>`
-          : "";
-        const adicionais = (base.adicionais || [])
-          .map((a, j) => `<li><span class="tipo">+ ${esc(e.adicionais[j].nome)}</span><span class="pontilhado"></span><span class="valor"><small>${esc(MOEDAS[moeda])}</small>${esc(preco(a))}${a.porUnidade ? `<em>${esc(t.cada)}</em>` : ""}</span></li>`)
-          .join("");
-        return `
-      <article class="ingresso revelar" style="transition-delay:${i * 110}ms">
-        <div class="ingresso-topo" aria-hidden="true"><span>${esc(t.ingresso)}</span><span>Nº ${String(i + 1).padStart(3, "0")}</span></div>
-        ${imagem}
-        <h3>${esc(e.nome)}</h3>
-        <p class="ingresso-desc">${esc(e.descricao)}</p>
-        <ul class="tabela">
-          ${(base.itens || [])
-            .map((it, j) => `<li>${iconeCorte(it.tipo)}<span class="tipo">${esc(e.itens[j].tipo)}</span><span class="pontilhado"></span><span class="valor"><small>${esc(MOEDAS[moeda])}</small>${esc(preco(it))}</span></li>`)
-            .join("")}
-        </ul>
-        ${adicionais ? `<p class="tabela-titulo">${esc(t.adicionais)}</p><ul class="tabela tabela-adicionais">${adicionais}</ul>` : ""}
-        ${isFinite(menor) ? `<div class="ingresso-canhoto"><span>${esc(t.a_partir_de)}</span><strong><small>${esc(MOEDAS[moeda])}</small>${esc(menor)}</strong></div>` : ""}
-      </article>`;
-      })
-      .join("");
-
-    // mais serviços (ref sheet, stickers...)
-    $("#outros").hidden = !outros.length;
-    $("#outros-lista").innerHTML = outros
-      .map((o, i) => {
-        const base = BASE.precos.outros[i];
-        return `<article class="outro">
-          <span class="outro-img">${imagemOuVazio(o.imagem, o.nome.slice(0, 1), "outro-vazio")}</span>
-          <div class="outro-corpo">
-            <h4>${esc(o.nome)}</h4>
-            <p>${esc(o.descricao)}</p>
-          </div>
-          <p class="outro-preco"><small>${esc(MOEDAS[moeda])}</small>${esc(preco(base))}${base.porUnidade ? `<em>${esc(preencher(t.por_unidade, { unidade: o.unidade }))}</em>` : ""}</p>
-        </article>`;
-      })
-      .join("");
-
-    // avisos (a seção some enquanto não tiver regras nem "não faço")
-    const regras = d.avisos?.lista || [];
-    const naoFaco = (d.avisos?.naoFaco || []).map((n) => `<li>${esc(n)}</li>`).join("");
-    $("#avisos").hidden = !regras.length && !naoFaco;
-    $("#regras").innerHTML = regras
-      .map((r) => `<div${r.destaque ? ' class="regra-destaque"' : ""}>${PETALA}<dt>${esc(r.titulo)}</dt><dd>${esc(r.texto)}</dd></div>`)
-      .join("");
-    $("#nao-faco").innerHTML = naoFaco;
-    $("#nao-faco-quadro").hidden = !naoFaco;
-    // o mesmo lembrete aparece dentro do "Monte seu pedido", antes do campo da ideia
-    $("#pedido-nao-faco-lista").innerHTML = naoFaco;
-    $("#pedido-nao-faco").hidden = !naoFaco;
-    $("#resumo-pagamento").hidden = !d.pedido?.pagamento;
-
-    // perguntas frequentes
-    const perguntas = d.faq?.perguntas || [];
-    $("#faq").hidden = !perguntas.length;
-    $("#faq-lista").innerHTML = perguntas
-      .map((p) => `<details class="faq-item"><summary>${esc(p.pergunta)}<span class="faq-icone" aria-hidden="true"></span></summary><p>${esc(p.resposta)}</p></details>`)
-      .join("");
-
-    // redes
-    $("#redes").innerHTML = (d.contato?.redes || [])
-      .map((r) => {
-        const icone = ICONES[normalizar(r.icone || r.nome)] || ICONES.padrao;
-        return `<li><a href="${esc(r.url)}" target="_blank" rel="noopener">
-          <span class="rede-icone"><svg viewBox="0 0 24 24" aria-hidden="true">${icone}</svg></span>
-          <span><span class="rede-nome">${esc(r.nome)}</span><span class="rede-usuario">${esc(r.usuario)}</span></span>
-          <span class="rede-seta" aria-hidden="true">↗</span>
-        </a></li>`;
-      })
-      .join("");
-
-    // o menu não mostra seções que estão escondidas
-    $$(".menu a").forEach((a) => (a.hidden = !!$(a.getAttribute("href"))?.hidden));
-
-    $("#ano").textContent = new Date().getFullYear();
-
-    // imagens do visor (ampliar)
-    gruposVisor = {
-      galeria: obras.map((o) => ({ src: o.imagem, titulo: o.titulo, alt: o.descricao || o.titulo })),
-      precos: tabelasComImagem.map((e) => ({ src: e.imagem, titulo: e.nome, alt: preencher(t.tabela_alt, { nome: e.nome }) }))
-    };
-
+    montarLogo(d.artista?.nome || "");
+    montarGaleria(d, t);
+    montarPrecos(d, t);
+    montarSobre(d, t);
     montarPedido(d, t);
+    $("#ano").textContent = new Date().getFullYear();
 
     if (!jaMontou) {
       jaMontou = true;
       ativarVisor();
-      ativarVideo();
       ativarPedido();
     }
-    ativarRevelar();
   }
 
   /* ---------------- visor de imagens ---------------- */
@@ -650,6 +722,7 @@
       $("#visor-imagem").src = item.src;
       $("#visor-imagem").alt = item.alt;
       $("#visor-titulo").textContent = item.titulo;
+      $("#visor-legenda").textContent = [item.tipo, item.preco].filter(Boolean).join(" · ");
       $("#visor-contador").textContent = grupo.length > 1 ? `${atual + 1} / ${grupo.length}` : "";
       $$(".visor-seta", visor).forEach((b) => (b.hidden = grupo.length < 2));
     };
@@ -657,19 +730,24 @@
     document.addEventListener("click", (ev) => {
       const alvo = ev.target.closest("[data-grupo]");
       if (!alvo || !visor.showModal) return;
-      grupo = gruposVisor[alvo.dataset.grupo] || [];
+      let inicio = Number(alvo.dataset.indice);
+      if (alvo.dataset.grupo === "galeria") {
+        // na galeria, o visor passa só pelas artes do filtro escolhido
+        const visiveis = $$("#mural .peca:not([hidden]) [data-indice]").map((b) => Number(b.dataset.indice));
+        grupo = visiveis.map((i) => itensGaleria[i]);
+        inicio = visiveis.indexOf(inicio);
+      } else {
+        grupo = itensPrecos;
+      }
       if (!grupo.length) return;
       origem = alvo;
-      mostrar(Number(alvo.dataset.indice));
+      mostrar(inicio);
       visor.showModal();
-      // o spray e a lata vão junto para dentro do visor
-      visor.append(...efeitosMouse());
     });
 
-    const fechar = () => { visor.close(); devolverEfeitosMouse(); };
     visor.addEventListener("click", (ev) => {
       const acao = ev.target.closest("[data-visor]")?.dataset.visor;
-      if (acao === "fechar" || ev.target === visor || ev.target.tagName === "FIGURE") fechar();
+      if (acao === "fechar" || ev.target === visor || ev.target.tagName === "FIGURE") visor.close();
       if (acao === "anterior") mostrar(atual - 1);
       if (acao === "proxima") mostrar(atual + 1);
     });
@@ -677,10 +755,7 @@
       if (ev.key === "ArrowLeft") mostrar(atual - 1);
       if (ev.key === "ArrowRight") mostrar(atual + 1);
     });
-    visor.addEventListener("close", () => {
-      devolverEfeitosMouse();
-      origem?.focus();
-    });
+    visor.addEventListener("close", () => origem?.focus());
 
     // deslizar no celular
     let inicioX = null;
@@ -690,253 +765,6 @@
       const dx = ev.changedTouches[0].clientX - inicioX;
       if (Math.abs(dx) > 50 && grupo.length > 1) mostrar(atual + (dx < 0 ? 1 : -1));
       inicioX = null;
-    });
-  }
-
-  // traz o spray e a lata de volta para a página quando o visor fecha
-  const efeitosMouse = () => [$("#rastro-cursor"), $("#lata-cursor")];
-  function devolverEfeitosMouse() {
-    if ($("#lata-cursor").parentElement !== document.body) document.body.append(...efeitosMouse());
-  }
-
-  /* ---------------- vídeo ---------------- */
-
-  let atualizarBotaoVideo = () => {};
-
-  function ativarVideo() {
-    const video = $("#video");
-    let pausadoPeloUsuario = semMovimento;
-    video.addEventListener("play", () => atualizarBotaoVideo());
-    video.addEventListener("pause", () => atualizarBotaoVideo());
-
-    $("#video-botao").addEventListener("click", () => {
-      if (video.paused) { pausadoPeloUsuario = false; video.play().catch(() => {}); }
-      else { pausadoPeloUsuario = true; video.pause(); }
-    });
-
-    if ("IntersectionObserver" in window) {
-      new IntersectionObserver(
-        ([e]) => {
-          if (e.isIntersecting && !pausadoPeloUsuario && video.getAttribute("src")) video.play().catch(() => {});
-          else if (!e.isIntersecting) video.pause();
-        },
-        { threshold: 0.3 }
-      ).observe(video);
-    }
-  }
-
-  /* ---------------- animações de entrada ---------------- */
-
-  let observadorRevelar = null;
-
-  function ativarRevelar() {
-    if (semMovimento || !("IntersectionObserver" in window)) return;
-    // ao trocar de idioma ou moeda, o que já apareceu não anima de novo
-    if (observadorRevelar) {
-      $$(".revelar:not(.visto)").forEach((el) => el.classList.add("visto"));
-      return;
-    }
-    observadorRevelar = new IntersectionObserver(
-      (entradas) =>
-        entradas.forEach((e) => {
-          if (e.isIntersecting) { e.target.classList.add("visto"); observadorRevelar.unobserve(e.target); }
-        }),
-      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" }
-    );
-    $$(".revelar").forEach((el) => observadorRevelar.observe(el));
-    document.documentElement.classList.add("animar");
-  }
-
-  /* ---------------- topo, menu (setlist) e inclinação da arte ---------------- */
-
-  const topo = $("#topo");
-  let pendente = false;
-  const aoRolar = () => {
-    pendente = false;
-    topo.classList.toggle("rolado", window.scrollY > 20);
-  };
-  addEventListener("scroll", () => { if (!pendente) { pendente = true; requestAnimationFrame(aoRolar); } }, { passive: true });
-  // ao recarregar no meio da página o navegador volta para a posição antiga depois do carregamento
-  addEventListener("load", aoRolar);
-  aoRolar();
-
-  // menu em tela cheia: abre e fecha a setlist
-  const setlist = $("#setlist");
-  const botaoMenu = $("#menu-botao");
-  const abrirMenu = (abrir, devolverFoco = true) => {
-    setlist.hidden = !abrir;
-    botaoMenu.setAttribute("aria-expanded", String(abrir));
-    document.documentElement.style.overflow = abrir ? "hidden" : "";
-    if (abrir) $(".menu a:not([hidden])", setlist)?.focus();
-    else if (devolverFoco) botaoMenu.focus({ preventScroll: true });
-  };
-  botaoMenu.addEventListener("click", () => abrirMenu(setlist.hidden));
-  $("#setlist-fechar").addEventListener("click", () => abrirMenu(false));
-  setlist.addEventListener("click", (ev) => {
-    if (ev.target === setlist) abrirMenu(false);
-    // ao escolher uma seção, fecha sem roubar o foco (assim a página rola até ela)
-    if (ev.target.closest(".menu a")) abrirMenu(false, false);
-  });
-  addEventListener("keydown", (ev) => { if (ev.key === "Escape" && !setlist.hidden) abrirMenu(false); });
-
-  if ("IntersectionObserver" in window) {
-    const links = $$(".menu a");
-    const obsMenu = new IntersectionObserver(
-      (entradas) =>
-        entradas.forEach((e) => {
-          if (!e.isIntersecting) return;
-          links.forEach((a) => a.setAttribute("aria-current", String(a.getAttribute("href") === `#${e.target.id}`)));
-        }),
-      { rootMargin: "-45% 0px -50% 0px" }
-    );
-    $$("main section[id]").forEach((s) => obsMenu.observe(s));
-  }
-
-  const arte = $(".hero-arte");
-  const quadro = $("#quadro");
-  if (!semMovimento && mouseFino) {
-    arte.addEventListener("pointermove", (ev) => {
-      const r = arte.getBoundingClientRect();
-      const x = (ev.clientX - r.left) / r.width;
-      const y = (ev.clientY - r.top) / r.height;
-      quadro.style.setProperty("--ry", `${(x - 0.5) * 12}deg`);
-      quadro.style.setProperty("--rx", `${(0.5 - y) * 10}deg`);
-      quadro.style.setProperty("--bx", `${x * 100}%`);
-      quadro.style.setProperty("--by", `${y * 100}%`);
-    });
-    arte.addEventListener("pointerleave", () => {
-      quadro.style.setProperty("--rx", "0deg");
-      quadro.style.setProperty("--ry", "0deg");
-    });
-  }
-
-  /* ---------------- mouse: lata de spray ---------------- */
-
-  // cada clique troca a cor da tinta: roxo, laranja, verde e vermelho
-  const CORES_SPRAY = ["157, 107, 255", "255, 138, 31", "92, 170, 50", "229, 56, 59"];
-  let corSpray = 0;
-  const lata = $("#lata-cursor");
-
-  const spray = (() => {
-    const tela = $("#rastro-cursor");
-    if (!mouseFino || semMovimento || !tela.getContext) return { ponto() {}, jato() {}, soltar() {} };
-    const ctx = tela.getContext("2d");
-    let gotas = [];                // {x, y, r, cor, vida, max, vy}
-    let rodando = false, ultimo = 0, anterior = null;
-    let leve = false;              // vira true se o computador não aguentar o efeito
-    const lentidao = [];           // duração dos últimos quadros, para perceber travamento
-
-    const ajustar = () => {
-      const dpr = Math.min(devicePixelRatio || 1, 1.5);
-      tela.width = innerWidth * dpr;
-      tela.height = innerHeight * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-    ajustar();
-    addEventListener("resize", ajustar);
-
-    // pontinhos de tinta em volta de (x, y), mais juntos no centro, como um spray de verdade
-    const borrifar = (x, y, quantos, raio, tam) => {
-      const cor = CORES_SPRAY[corSpray];
-      for (let i = 0; i < quantos; i++) {
-        const ang = Math.random() * Math.PI * 2, dist = Math.pow(Math.random(), 1.8) * raio;
-        gotas.push({ x: x + Math.cos(ang) * dist, y: y + Math.sin(ang) * dist, r: Math.random() * tam + 0.5, cor, vida: 0, max: 650 + Math.random() * 450, vy: 0 });
-      }
-      if (gotas.length > 1500) gotas.splice(0, gotas.length - 1500);
-    };
-
-    // se a animação ficar abaixo de ~30 quadros por segundo, desliga o spray (fica só a lata)
-    const vigiar = (bruto) => {
-      lentidao.push(bruto);
-      if (lentidao.length > 40) lentidao.shift();
-      if (lentidao.length < 40) return;
-      const media = lentidao.reduce((s, v) => s + v, 0) / lentidao.length;
-      if (media > 34) {
-        leve = true;
-        gotas = [];
-        ctx.clearRect(0, 0, innerWidth, innerHeight);
-        document.documentElement.classList.add("efeitos-leves");
-      }
-    };
-
-    const desenhar = (agora) => {
-      const bruto = agora - (ultimo || agora);
-      const dt = Math.min(bruto, 50);
-      if (ultimo && bruto < 500) vigiar(bruto);
-      ultimo = agora;
-      if (leve) { rodando = false; ultimo = 0; return; }
-      ctx.clearRect(0, 0, innerWidth, innerHeight);
-      gotas = gotas.filter((g) => (g.vida += dt) < g.max);
-      for (const g of gotas) {
-        // as gotas grandes do clique escorrem devagar
-        if (g.vy) { g.y += g.vy * dt * 0.06; g.vy *= 0.985; }
-        const vida = 1 - g.vida / g.max;
-        ctx.fillStyle = `rgba(${g.cor}, ${Math.min(1, vida * 1.4) * 0.85})`;
-        ctx.beginPath();
-        ctx.arc(g.x, g.y, g.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      rodando = gotas.length > 0;
-      if (rodando) requestAnimationFrame(desenhar);
-      else { ultimo = 0; ctx.clearRect(0, 0, innerWidth, innerHeight); }
-    };
-    const animar = () => { if (!rodando) { rodando = true; requestAnimationFrame(desenhar); } };
-
-    return {
-      ponto(x, y) {
-        if (leve) return;
-        if (anterior) {
-          // preenche o caminho entre um movimento e outro, para o traço não sair falhado
-          const passos = Math.min(8, Math.ceil(Math.hypot(x - anterior.x, y - anterior.y) / 7));
-          for (let i = 1; i <= passos; i++) borrifar(anterior.x + ((x - anterior.x) * i) / passos, anterior.y + ((y - anterior.y) * i) / passos, 3, 8, 1.3);
-        }
-        anterior = { x, y };
-        animar();
-      },
-      jato(x, y) {
-        if (leve) return;
-        borrifar(x, y, 70, 26, 2.4);
-        const cor = CORES_SPRAY[corSpray];
-        for (let i = 0; i < 4; i++) gotas.push({ x: x + (Math.random() - 0.5) * 30, y: y + Math.random() * 10, r: 2.2 + Math.random() * 2, cor, vida: 0, max: 1300 + Math.random() * 600, vy: 0.8 + Math.random() * 1.2 });
-        animar();
-      },
-      soltar() { anterior = null; }
-    };
-  })();
-
-  if (mouseFino) {
-    const visor = $("#visor");
-    const pintarLata = () => lata.style.setProperty("--tinta-spray", `rgb(${CORES_SPRAY[corSpray]})`);
-    pintarLata();
-
-    addEventListener("pointermove", (ev) => {
-      if (ev.pointerType !== "mouse") return;
-      // proteção: se o visor fechou, a lata nunca pode ficar presa dentro dele
-      if (!visor.open) devolverEfeitosMouse();
-      // a lata fica exatamente na ponta do mouse (sem atraso)
-      lata.style.setProperty("--ax", `${ev.clientX}px`);
-      lata.style.setProperty("--ay", `${ev.clientY}px`);
-      spray.ponto(ev.clientX, ev.clientY);
-      document.documentElement.classList.add("com-lata");
-      lata.classList.add("ativa");
-      // sobre links e botões a lata cresce e inclina um pouco
-      lata.classList.toggle("sobre-link", !!ev.target.closest?.("a, button, select, label, [data-grupo]"));
-    }, { passive: true });
-
-    addEventListener("pointerdown", (ev) => {
-      if (ev.pointerType !== "mouse") return;
-      corSpray = (corSpray + 1) % CORES_SPRAY.length;
-      pintarLata();
-      spray.jato(ev.clientX, ev.clientY);
-      // a lata chacoalha (reinicia a animação a cada clique)
-      lata.classList.remove("pintando");
-      void lata.offsetWidth;
-      lata.classList.add("pintando");
-    });
-    lata.addEventListener("animationend", () => lata.classList.remove("pintando"));
-    document.documentElement.addEventListener("mouseleave", () => {
-      lata.classList.remove("ativa");
-      spray.soltar();
     });
   }
 
@@ -954,6 +782,9 @@
 
   const carregar = (arquivo) =>
     fetch(arquivo, { cache: "no-cache" }).then((r) => { if (!r.ok) throw new Error(`${arquivo}: HTTP ${r.status}`); return r.json(); });
+
+  // a aba certa aparece antes mesmo do conteúdo carregar
+  irPara(location.hash.slice(1), false) || irPara("galeria", false);
 
   Promise.all([carregar("conteudo.json"), carregar("traducoes.json").catch((e) => { console.warn(e); return { idiomas: [{ codigo: "pt", nome: "Português", sigla: "PT" }], interface: {} }; })])
     .then(([conteudo, traducoes]) => {
