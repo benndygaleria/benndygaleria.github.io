@@ -34,6 +34,33 @@
     "subtitulo": "Uma pequena coleção do que eu ando desenhando.",
     "obras": [
       {
+        "imagem": "imagens/render-beco.jpg",
+        "titulo": "Beco vermelho",
+        "descricao": "Personagem urso musculoso de calça jeans andando por um beco estreito de pedras, iluminado por um lampião vermelho, com janelas gradeadas nas paredes",
+        "estilo": "Full Rendered",
+        "tamanho": "Full body",
+        "ocsExtras": 0,
+        "adicionais": ["Background"]
+      },
+      {
+        "imagem": "imagens/render-sorrisao.jpg",
+        "titulo": "Sorrisão",
+        "descricao": "Retrato de um personagem verde de orelhas longas com piercings e topete vermelho, abrindo um sorriso enorme cheio de dentes, sobre fundo laranja",
+        "estilo": "Full Rendered",
+        "tamanho": "Icon",
+        "ocsExtras": 0,
+        "adicionais": []
+      },
+      {
+        "imagem": "imagens/render-alana.jpg",
+        "titulo": "Alana sob o sol",
+        "descricao": "Personagem réptil vermelha com listras pretas e barriga branca, de biquíni vermelho, vista de baixo com as mãos na cintura, contra um céu azul com o sol atrás da cabeça",
+        "estilo": "Full Rendered",
+        "tamanho": "Half body",
+        "ocsExtras": 0,
+        "adicionais": ["Background"]
+      },
+      {
         "imagem": "imagens/sketch-apaixonado.jpg",
         "titulo": "Suspiro apaixonado",
         "descricao": "Personagem canino de pelo marrom e juba preta longa com trança, sentado num banquinho com o queixo apoiado na mão, olhando para cima com corações vermelhos em volta, num fundo rosa",
@@ -116,7 +143,7 @@
       {
         "nome": "Full Rendered",
         "descricao": "Pintura completa, com luz, sombra e acabamento detalhado.",
-        "imagem": "",
+        "imagem": "imagens/render-sorrisao.jpg",
         "itens": [
           { "tipo": "Icon", "brl": 30, "usd": 50 },
           { "tipo": "Half body", "brl": 40, "usd": 60 },

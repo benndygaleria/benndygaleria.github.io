@@ -329,6 +329,9 @@
         "titulo": "Some artwork…",
         "subtitulo": "A small collection of what I've been drawing.",
         "obras": [
+          { "titulo": "Red alley", "descricao": "Muscular bear character in jeans walking down a narrow cobblestone alley lit by a red lantern, with barred windows on the walls" },
+          { "titulo": "Big grin", "descricao": "Portrait of a green character with long pierced ears and a red quiff, flashing a huge toothy grin, on an orange background" },
+          { "titulo": "Alana in the sun", "descricao": "Red reptile character with black stripes and a white belly, in a red bikini, seen from below with hands on her hips, against a blue sky with the sun behind her head" },
           { "titulo": "Lovesick sigh", "descricao": "Brown-furred canine character with a long black mane and braid, sitting on a stool with his chin in his hand, looking up with red hearts around him, on a pink background" },
           { "titulo": "Study: blue dog", "descricao": "Study sheet of a chubby, fluffy blue and purple dog character, seen from the front and back, with a close-up of the paw prints drawn on his arm" },
           { "titulo": "Stickers: striped crocodile", "descricao": "Pack of 6 stickers of a red crocodile with black stripes in different poses, one of them holding a beer can, on a red background" },
@@ -406,6 +409,9 @@
         "titulo": "Algunas artes…",
         "subtitulo": "Una pequeña colección de lo que ando dibujando.",
         "obras": [
+          { "titulo": "Callejón rojo", "descricao": "Personaje oso musculoso con jeans caminando por un callejón estrecho de adoquines, iluminado por un farol rojo, con ventanas enrejadas en las paredes" },
+          { "titulo": "Sonrisota", "descricao": "Retrato de un personaje verde de orejas largas con piercings y copete rojo, mostrando una sonrisa enorme llena de dientes, sobre fondo naranja" },
+          { "titulo": "Alana bajo el sol", "descricao": "Personaje reptil roja con rayas negras y barriga blanca, en bikini rojo, vista desde abajo con las manos en la cintura, contra un cielo azul con el sol detrás de la cabeza" },
           { "titulo": "Suspiro enamorado", "descricao": "Personaje canino de pelaje marrón y melena negra larga con trenza, sentado en un taburete con la barbilla apoyada en la mano, mirando hacia arriba con corazones rojos alrededor, sobre un fondo rosa" },
           { "titulo": "Estudio: perro azul", "descricao": "Hoja de estudio de un personaje perro azul y morado, gordito y peludo, visto de frente y de espaldas, con el detalle de las huellas dibujadas en el brazo" },
           { "titulo": "Stickers: cocodrilo rayado", "descricao": "Pack de 6 stickers de un cocodrilo rojo con rayas negras en distintas poses, uno de ellos sosteniendo una lata de cerveza, sobre fondo rojo" },

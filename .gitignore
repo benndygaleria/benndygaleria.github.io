@@ -1,2 +1,5 @@
 # configuração local do Claude Code (servidor de prévia), não vai para o site
 .claude/
+
+# imagens em tamanho original (pesadas demais para o site); o site usa as versões otimizadas em imagens/
+originais/
