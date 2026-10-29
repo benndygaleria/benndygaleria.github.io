@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<title>BenndyGaleria - Artista Digital</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Benndy, artista digital e animador nordestino. Veja os preços em real e em dólar, monte seu pedido e chame no Telegram para comissionar uma arte.">
+<meta name="theme-color" content="#120E0C">
+<!-- Prévia que aparece quando o link é enviado (Discord, WhatsApp, Telegram, Instagram...).
+     Se o endereço do site for outro, troque "https://benndygaleria.github.io/" nas linhas abaixo. -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://benndygaleria.github.io/">
+<meta property="og:site_name" content="BenndyGaleria">
+<meta property="og:title" content="BenndyGaleria - Artista Digital">
+<meta property="og:description" content="Benndy, artista digital e animador nordestino. Veja os preços em real e em dólar, monte seu pedido e chame no Telegram para comissionar uma arte.">
+<meta property="og:image" content="https://benndygaleria.github.io/compartilhar.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Personagem de pele verde e cabelo laranja, arte de Benndy">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="BenndyGaleria - Artista Digital">
+<meta name="twitter:description" content="Benndy, artista digital e animador nordestino. Veja os preços em real e em dólar, monte seu pedido e chame no Telegram para comissionar uma arte.">
+<meta name="twitter:image" content="https://benndygaleria.github.io/compartilhar.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23120E0C' stroke='%23E9DCC4' stroke-width='2'/%3E%3Cg fill='%23FF8F2E'%3E%3Cellipse cx='16' cy='8' rx='5' ry='4'/%3E%3Cellipse cx='8.5' cy='12' rx='4' ry='4.6'/%3E%3Cellipse cx='23.5' cy='12' rx='4' ry='4.6'/%3E%3C/g%3E%3Ctext x='16' y='28' font-family='Arial Black,Arial,sans-serif' font-size='15' font-weight='900' text-anchor='middle' fill='%239D6BFF' stroke='%231E1209' stroke-width='1'%3EB%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Bowlby+One&family=Permanent+Marker&family=Rubik+Spray+Paint&family=Special+Elite&display=swap">
+<!-- o "?v=" força os navegadores a baixar a versão nova; aumente o número quando mudar o CSS ou o JS -->
+<link rel="stylesheet" href="estilo.css?v=4">
+</head>
+<body>
+
+<a class="pular" href="#principal" data-i18n="pular">Pular para o conteúdo</a>
+
+<!-- Tudo o que aparece no site vem do arquivo conteudo.json (em português).
+     As versões em inglês e espanhol ficam em traducoes.json. -->
+
+<header class="topo" id="topo">
+  <div class="topo-dentro">
+    <a class="marca" href="#inicio" data-i18n-aria="inicio" aria-label="Início">
+      <svg class="marca-flor" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="5" ry="4"/><ellipse cx="5" cy="10.5" rx="4" ry="4.6"/><ellipse cx="19" cy="10.5" rx="4" ry="4.6"/><ellipse cx="8" cy="18" rx="4.4" ry="4"/><ellipse cx="16" cy="18" rx="4.4" ry="4"/></svg>
+      <span data-campo="nome">BenndyGaleria</span>
+    </a>
+    <div class="topo-acoes">
+      <span class="status" data-status><span class="status-ponto"></span><span class="status-texto"></span></span>
+      <label class="idioma">
+        <span class="so-leitor" data-i18n="idioma">Idioma</span>
+        <select id="idioma"></select>
+      </label>
+      <button class="menu-botao" id="menu-botao" type="button" aria-expanded="false" aria-controls="setlist">
+        <span class="menu-botao-icone" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span data-i18n="menu">Menu</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- menu em tela cheia, no estilo setlist de show colada na parede -->
+<div class="setlist" id="setlist" hidden>
+  <div class="setlist-papel">
+    <p class="setlist-titulo" data-i18n="setlist">Setlist</p>
+    <nav class="menu" data-i18n-aria="secoes" aria-label="Seções">
+      <a href="#sobre" data-i18n="menu_sobre">Sobre</a>
+      <a href="#trabalhos" data-i18n="menu_trabalhos">Trabalhos</a>
+      <a href="#processo" data-i18n="menu_processo">Processo</a>
+      <a href="#precos" data-i18n="menu_precos">Preços</a>
+      <a href="#avisos" data-i18n="menu_avisos">Avisos</a>
+      <a href="#pedido" data-i18n="menu_pedido">Pedido</a>
+      <a href="#faq" data-i18n="menu_faq">Dúvidas</a>
+      <a href="#contato" data-i18n="contato">Contato</a>
+    </nav>
+    <button class="setlist-fechar" id="setlist-fechar" type="button" data-i18n-aria="fechar" aria-label="Fechar">✕</button>
+  </div>
+</div>
+
+<main id="principal">
+
+  <!-- abertura: cartaz de show -->
+  <section class="hero" id="inicio" aria-labelledby="hero-nome">
+    <div class="container hero-grade">
+      <span class="carimbo" data-status><span class="status-ponto"></span><span class="status-texto"></span></span>
+      <h1 class="hero-nome" id="hero-nome"><span class="hero-nome-texto"></span></h1>
+      <div class="hero-texto">
+        <p class="hero-descricao" data-campo="artista.descricao"></p>
+        <p class="hero-detalhe" data-campo="artista.detalhe"></p>
+        <div class="hero-botoes">
+          <a class="botao" href="#precos" data-i18n="ver_precos">Ver preços</a>
+          <a class="botao botao-contorno" href="#contato" data-i18n="ver_redes">Ver redes</a>
+        </div>
+      </div>
+      <div class="hero-arte">
+        <div class="quadro" id="quadro">
+          <img id="hero-imagem" alt="" width="713" height="704" fetchpriority="high">
+          <span class="quadro-brilho" aria-hidden="true"></span>
+        </div>
+        <svg class="petala petala-1" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1C18 5 20 13 12 23 4 13 6 5 12 1Z"/></svg>
+        <svg class="petala petala-2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1C18 5 20 13 12 23 4 13 6 5 12 1Z"/></svg>
+        <svg class="petala petala-3" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1C18 5 20 13 12 23 4 13 6 5 12 1Z"/></svg>
+        <span class="adesivo" aria-hidden="true" data-i18n="adesivo">artista + animador</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- duas fitas cruzadas rolando em sentidos opostos -->
+  <div class="faixas" aria-hidden="true">
+    <div class="faixa faixa-a"><div class="faixa-trilho"></div></div>
+    <div class="faixa faixa-b"><div class="faixa-trilho"></div></div>
+  </div>
+
+  <section class="secao" id="sobre" aria-labelledby="sobre-titulo">
+    <div class="container sobre-grade">
+      <figure class="sobre-foto revelar">
+        <img id="sobre-imagem" alt="" loading="lazy" decoding="async">
+      </figure>
+      <div class="sobre-texto revelar">
+        <header class="secao-cabeca">
+          <span class="numero" aria-hidden="true"></span>
+          <p class="etiqueta" data-campo="sobre.etiqueta"></p>
+          <h2 id="sobre-titulo" data-campo="sobre.titulo"></h2>
+        </header>
+        <div class="sobre-paragrafos" id="sobre-paragrafos"></div>
+        <ul class="sobre-destaques" id="sobre-destaques"></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao" id="trabalhos" aria-labelledby="galeria-titulo">
+    <div class="container">
+      <header class="secao-cabeca revelar">
+        <span class="numero" aria-hidden="true"></span>
+        <p class="etiqueta" data-campo="galeria.etiqueta"></p>
+        <h2 id="galeria-titulo" data-campo="galeria.titulo"></h2>
+        <p class="secao-sub" data-campo="galeria.subtitulo"></p>
+      </header>
+      <div class="aviso-estimativa revelar" role="note">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5v.5"/></svg>
+        <div><strong data-i18n="aviso_estimativa_titulo">Isto é uma estimativa</strong><p data-i18n="aviso_estimativa_texto"></p></div>
+      </div>
+      <div class="galeria" id="galeria"></div>
+    </div>
+  </section>
+
+  <section class="secao" id="processo" aria-labelledby="processo-titulo">
+    <div class="container processo-grade">
+      <div class="processo-texto revelar">
+        <header class="secao-cabeca">
+          <span class="numero" aria-hidden="true"></span>
+          <p class="etiqueta" data-campo="processo.etiqueta"></p>
+          <h2 id="processo-titulo" data-campo="processo.titulo"></h2>
+          <p class="secao-sub" data-campo="processo.texto"></p>
+        </header>
+        <button class="botao botao-contorno" id="video-botao" type="button" aria-pressed="false">Pausar vídeo</button>
+      </div>
+      <div class="video-quadro revelar" id="video-quadro">
+        <video id="video" muted loop playsinline preload="metadata" data-i18n-aria="video_aria"></video>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao rasgado rasgado-verde" id="precos" aria-labelledby="precos-titulo">
+    <div class="container">
+      <div class="precos-cabeca">
+        <header class="secao-cabeca revelar">
+          <span class="numero" aria-hidden="true"></span>
+          <p class="etiqueta" data-campo="precos.etiqueta"></p>
+          <h2 id="precos-titulo" data-campo="precos.titulo"></h2>
+        </header>
+        <div class="precos-opcoes revelar">
+          <div class="moeda-troca" role="group" data-i18n-aria="moeda" aria-label="Moeda" data-moedas></div>
+          <p class="nota" data-i18n="moeda_nota"></p>
+          <div class="legenda-tamanhos" id="legenda"></div>
+        </div>
+      </div>
+      <div class="precos" id="lista-precos"></div>
+      <div class="outros revelar" id="outros">
+        <h3 data-campo="precos.outrosTitulo"></h3>
+        <div class="outros-lista" id="outros-lista"></div>
+      </div>
+      <p class="aviso-fechado" id="aviso-fechado" data-i18n="aviso_fechado" hidden></p>
+      <div class="precos-chamada revelar">
+        <a class="botao" href="#pedido" data-i18n="montar_pedido">Montar meu pedido</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao" id="avisos" aria-labelledby="avisos-titulo">
+    <div class="container avisos-grade">
+      <div class="revelar">
+        <header class="secao-cabeca">
+          <span class="numero" aria-hidden="true"></span>
+          <h2 id="avisos-titulo" data-campo="avisos.titulo"></h2>
+        </header>
+        <dl class="regras" id="regras"></dl>
+      </div>
+      <div class="avisos-lateral">
+        <aside class="nao-faco revelar" id="nao-faco-quadro" aria-labelledby="nao-faco-titulo">
+          <h3 id="nao-faco-titulo" data-campo="avisos.naoFacoTitulo"></h3>
+          <ul id="nao-faco"></ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao rasgado rasgado-lilas" id="pedido" aria-labelledby="pedido-titulo">
+    <div class="container">
+      <header class="secao-cabeca revelar">
+        <span class="numero" aria-hidden="true"></span>
+        <p class="etiqueta" data-campo="pedido.etiqueta"></p>
+        <h2 id="pedido-titulo" data-campo="pedido.titulo"></h2>
+        <p class="secao-sub" data-campo="pedido.texto"></p>
+      </header>
+
+      <div class="pedido-grade">
+        <form class="pedido-form revelar" id="pedido-form" novalidate>
+          <fieldset class="pedido-grupo">
+            <legend data-i18n="pedido_estilo">Estilo</legend>
+            <div class="opcoes-estilo" id="opcoes-estilo"></div>
+          </fieldset>
+
+          <fieldset class="pedido-grupo" id="grupo-tamanho">
+            <legend data-i18n="pedido_tamanho">Tamanho</legend>
+            <div class="opcoes-pilula" id="opcoes-tamanho"></div>
+          </fieldset>
+
+          <fieldset class="pedido-grupo" id="grupo-adicionais">
+            <legend data-i18n="pedido_adicionais">Adicionais</legend>
+            <div class="opcoes-pilula" id="opcoes-adicionais"></div>
+            <div class="contadores" id="contadores-adicionais"></div>
+          </fieldset>
+
+          <fieldset class="pedido-grupo" id="grupo-quantidade">
+            <legend data-i18n="pedido_quantidade">Quantidade</legend>
+            <div class="contadores" id="contador-quantidade"></div>
+          </fieldset>
+
+          <div class="pedido-nao-faco" id="pedido-nao-faco" role="note">
+            <p><span class="pedido-nao-faco-icone" aria-hidden="true"></span><span data-i18n="pedido_nao_faco">Antes de contar sua ideia, lembre que eu não faço:</span></p>
+            <ul id="pedido-nao-faco-lista"></ul>
+          </div>
+
+          <div class="pedido-grupo">
+            <label class="pedido-rotulo" for="pedido-ideia" data-i18n="pedido_ideia">Conte sua ideia (opcional)</label>
+            <textarea id="pedido-ideia" rows="4" maxlength="600"></textarea>
+          </div>
+        </form>
+
+        <!-- o resumo é um cupom de papel térmico -->
+        <aside class="pedido-resumo revelar" aria-labelledby="resumo-titulo">
+          <div class="cupom-topo" aria-hidden="true">
+            <p class="cupom-loja" data-campo="nome"></p>
+            <p data-i18n="cupom_sub">comissões · arte digital</p>
+            <p id="cupom-data"></p>
+          </div>
+          <div class="resumo-cabeca">
+            <h3 id="resumo-titulo" data-i18n="pedido_resumo">Seu pedido</h3>
+            <div class="moeda-troca moeda-troca-pequena" role="group" data-i18n-aria="moeda" aria-label="Moeda" data-moedas></div>
+          </div>
+          <ul class="resumo-linhas" id="resumo-linhas"></ul>
+          <div class="resumo-total">
+            <span data-i18n="pedido_total">Valor estimado</span>
+            <strong id="resumo-total" aria-live="polite"></strong>
+          </div>
+          <div class="aviso-estimativa" role="note">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5v.5"/></svg>
+            <div><strong data-i18n="aviso_estimativa_titulo">Isto é uma estimativa</strong><p data-i18n="aviso_estimativa_texto"></p></div>
+          </div>
+          <p class="resumo-pagamento" id="resumo-pagamento"><b data-i18n="pedido_pagamento">Pagamento</b> <span data-campo="pedido.pagamento"></span></p>
+          <p class="resumo-fechado" id="resumo-fechado" data-i18n="pedido_fechado" hidden></p>
+          <div class="resumo-acoes">
+            <a class="botao" id="pedido-telegram" href="#" target="_blank" rel="noopener" data-i18n="pedido_telegram">Enviar pelo Telegram</a>
+            <button class="botao botao-contorno" id="pedido-copiar" type="button" data-i18n="pedido_copiar">Copiar pedido</button>
+          </div>
+          <p class="resumo-aviso" id="pedido-aviso" role="status"></p>
+          <details class="resumo-mensagem">
+            <summary data-i18n="pedido_ver_mensagem">Ver a mensagem</summary>
+            <pre id="pedido-mensagem"></pre>
+          </details>
+          <div class="codigo-barras" aria-hidden="true"></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao" id="faq" aria-labelledby="faq-titulo">
+    <div class="container faq-grade">
+      <header class="secao-cabeca revelar">
+        <span class="numero" aria-hidden="true"></span>
+        <p class="etiqueta" data-campo="faq.etiqueta"></p>
+        <h2 id="faq-titulo" data-campo="faq.titulo"></h2>
+      </header>
+      <div class="faq-lista revelar" id="faq-lista"></div>
+    </div>
+  </section>
+
+  <section class="secao rasgado rasgado-laranja contato" id="contato" aria-labelledby="contato-titulo">
+    <div class="container">
+      <header class="secao-cabeca contato-cabeca revelar">
+        <span class="numero" aria-hidden="true"></span>
+        <h2 class="contato-titulo" id="contato-titulo" data-campo="contato.titulo"></h2>
+        <p class="contato-sub" data-campo="contato.subtitulo"></p>
+        <p class="secao-sub" data-campo="contato.texto"></p>
+      </header>
+      <ul class="redes revelar" id="redes"></ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="rodape">
+  <div class="container rodape-dentro">
+    <p>© <span id="ano"></span> <span data-campo="nome"></span>. <span data-i18n="direitos">Todas as artes pertencem ao artista. Não use sem permissão.</span></p>
+    <a href="#inicio" data-i18n="voltar_topo">Voltar ao topo ↑</a>
+  </div>
+</footer>
+
+<!-- efeitos do mouse: lata de spray que pinta pontinhos por onde passa (cada clique troca a cor da tinta) -->
+<canvas class="rastro-cursor" id="rastro-cursor" aria-hidden="true"></canvas>
+<div class="lata-cursor" id="lata-cursor" aria-hidden="true">
+  <svg viewBox="0 0 40 40">
+    <!-- a lata é desenhada com o bico para cima e girada; o ponto (3,3) é a ponta do mouse -->
+    <g transform="translate(3 3) rotate(-45)">
+      <g class="lata-mexer">
+        <path class="lata-bico" d="M-1.6 0H1.6V3.5H-1.6Z"/>
+        <path class="lata-tampa" d="M-4.6 3.5H4.6V9.5H-4.6Z"/>
+        <path class="lata-corpo" d="M-6.5 9.5H6.5V36Q6.5 38.5 4 38.5H-4Q-6.5 38.5-6.5 36Z"/>
+        <path class="lata-rotulo" d="M-6.5 17H6.5V29H-6.5Z"/>
+        <path class="lata-brilho" d="M-3.8 12V35"/>
+      </g>
+    </g>
+  </svg>
+</div>
+
+<div class="erro" id="erro" hidden>
+  <p><strong>Não consegui carregar o conteúdo.</strong> Confira se os arquivos conteudo.json e traducoes.json estão na mesma pasta e sem erros de digitação (uma vírgula ou aspas faltando já quebra o arquivo).</p>
+</div>
+
+<dialog class="visor" id="visor" data-i18n-aria="visor" aria-label="Visualizar arte">
+  <button class="visor-fechar" type="button" data-visor="fechar" data-i18n-aria="fechar" aria-label="Fechar">✕</button>
+  <button class="visor-seta visor-anterior" type="button" data-visor="anterior" data-i18n-aria="anterior" aria-label="Anterior">←</button>
+  <figure>
+    <img id="visor-imagem" alt="">
+    <figcaption><strong id="visor-titulo"></strong> <span id="visor-contador"></span></figcaption>
+  </figure>
+  <button class="visor-seta visor-proxima" type="button" data-visor="proxima" data-i18n-aria="proxima" aria-label="Próxima">→</button>
+</dialog>
+
+<script src="script.js?v=4"></script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+# Configuração do painel de edição Pages CMS (https://pagescms.org)
+# Com isso, dá para editar o site por formulários, sem mexer em código.
+
+media:
+  input: imagens
+  output: imagens
+
+content:
+  - name: conteudo
+    label: Conteúdo do site
+    type: file
+    path: conteudo.json
+    format: json
+    fields:
+      - name: comissoes
+        label: Status das comissões
+        type: object
+        fields:
+          - { name: abertas, label: "Comissões abertas?", type: boolean }
+          - { name: textoAberto, label: Texto quando abertas, type: string }
+          - { name: textoFechado, label: Texto quando fechadas, type: string }
+
+      - name: artista
+        label: Apresentação (topo do site)
+        type: object
+        fields:
+          - { name: nome, label: "Nome (a parte depois da 2ª maiúscula fica em destaque, ex.: Benndy|Galeria)", type: string }
+          - { name: descricao, label: Frase principal, type: text }
+          - { name: detalhe, label: Frase secundária, type: string }
+          - { name: imagem, label: Arte de destaque, type: image }
+          - { name: imagemDescricao, label: "Descrição da arte (para leitores de tela)", type: string }
+
+      - name: sobre
+        label: Sobre (biografia)
+        type: object
+        fields:
+          - { name: etiqueta, label: Etiqueta, type: string }
+          - { name: titulo, label: Título, type: string }
+          - { name: texto, label: "Parágrafos da biografia", type: text, list: true }
+          - { name: destaques, label: "Destaques (etiquetas curtas)", type: string, list: true }
+          - { name: imagem, label: "Imagem (opcional)", type: image }
+          - { name: imagemDescricao, label: "Descrição da imagem (para leitores de tela)", type: string }
+
+      - name: galeria
+        label: Galeria
+        type: object
+        fields:
+          - { name: etiqueta, label: Etiqueta, type: string }
+          - { name: titulo, label: Título, type: string }
+          - { name: subtitulo, label: Subtítulo, type: text }
+          - name: obras
+            label: "Artes (a seção só aparece quando tiver pelo menos uma; o preço estimado é calculado pela tabela)"
+            type: object
+            list: true
+            fields:
+              - { name: imagem, label: Imagem, type: image }
+              - { name: titulo, label: Título, type: string }
+              - { name: descricao, label: "Descrição (para leitores de tela)", type: text }
+              - name: estilo
+                label: "Estilo ou serviço (igual ao nome na tabela: Sketch, Flat Color, Full Rendered, Ref sheet, Pack de stickers)"
+                type: string
+              - name: tamanho
+                label: Tamanho
+                type: select
+                options:
+                  values: ["", "Icon", "Half body", "Full body"]
+              - { name: ocsExtras, label: OCs extras, type: number }
+              - { name: adicionais, label: "Adicionais marcados (ex.: Background, Sombra)", type: string, list: true }
+              - { name: quantidade, label: "Quantidade (só para stickers)", type: number }
+              - { name: precoManualBRL, label: "Preço manual em R$ (opcional; substitui a estimativa)", type: string }
+              - { name: precoManualUSD, label: "Preço manual em US$ (opcional; substitui a estimativa)", type: string }
+              - { name: itens, label: "O que foi feito (opcional; um item por linha, substitui a conta embaixo da arte)", type: string, list: true }
+
+      - name: processo
+        label: Vídeo do processo
+        type: object
+        fields:
+          - { name: etiqueta, label: Etiqueta, type: string }
+          - { name: titulo, label: Título, type: string }
+          - { name: texto, label: Texto, type: text }
+          - { name: video, label: "Vídeo (.mp4; a seção só aparece com vídeo)", type: file }
+
+      - name: precos
+        label: Preços
+        type: object
+        fields:
+          - { name: etiqueta, label: Etiqueta, type: string }
+          - { name: titulo, label: Título, type: string }
+          - name: estilos
+            label: Estilos
+            type: object
+            list: true
+            fields:
+              - { name: nome, label: Nome do estilo, type: string }
+              - { name: descricao, label: Descrição, type: text }
+              - { name: imagem, label: "Arte de exemplo (opcional)", type: image }
+              - name: itens
+                label: Tamanhos e preços
+                type: object
+                list: true
+                fields:
+                  - { name: tipo, label: "Tamanho (Icon, Half body, Full body)", type: string }
+                  - { name: brl, label: "Preço em R$", type: number }
+                  - { name: usd, label: "Preço em US$", type: number }
+              - name: adicionais
+                label: Adicionais deste estilo
+                type: object
+                list: true
+                fields:
+                  - { name: nome, label: "Nome (OC extra, Sombra, Background...)", type: string }
+                  - { name: brl, label: "Preço em R$", type: number }
+                  - { name: usd, label: "Preço em US$", type: number }
+                  - { name: porUnidade, label: "Cobra por unidade? (ex.: cada OC extra)", type: boolean }
+          - { name: outrosTitulo, label: "Título de 'Mais serviços'", type: string }
+          - name: outros
+            label: Mais serviços
+            type: object
+            list: true
+            fields:
+              - { name: nome, label: Nome, type: string }
+              - { name: descricao, label: Descrição, type: text }
+              - { name: imagem, label: "Imagem (opcional)", type: image }
+              - { name: brl, label: "Preço em R$", type: number }
+              - { name: usd, label: "Preço em US$", type: number }
+              - { name: porUnidade, label: "Cobra por unidade? (ex.: por sticker)", type: boolean }
+              - { name: unidade, label: "Nome da unidade (ex.: sticker)", type: string }
+
+      - name: pedido
+        label: Monte seu pedido
+        type: object
+        fields:
+          - { name: etiqueta, label: Etiqueta, type: string }
+          - { name: titulo, label: Título, type: string }
+          - { name: texto, label: Texto, type: text }
+          - { name: pagamento, label: "Formas de pagamento (aparece no resumo; vazio = não aparece)", type: string }
+          - { name: maxExtras, label: "Máximo de OCs extras (0 = sem limite)", type: number }
+          - { name: telegram, label: "Link do Telegram que recebe os pedidos", type: string }
+
+      - name: avisos
+        label: Avisos
+        type: object
+        fields:
+          - { name: titulo, label: Título, type: string }
+          - name: lista
+            label: "Regras (a seção só aparece quando tiver regras ou 'Não faço')"
+            type: object
+            list: true
+            fields:
+              - { name: titulo, label: Título, type: string }
+              - { name: texto, label: Texto, type: text }
+              - { name: destaque, label: "Destacar em vermelho?", type: boolean }
+          - { name: naoFacoTitulo, label: "Título do quadro 'Não faço'", type: string }
+          - { name: naoFaco, label: "Não faço (um item por linha)", type: string, list: true }
+
+      - name: faq
+        label: Perguntas frequentes
+        type: object
+        fields:
+          - { name: etiqueta, label: Etiqueta, type: string }
+          - { name: titulo, label: Título, type: string }
+          - name: perguntas
+            label: Perguntas
+            type: object
+            list: true
+            fields:
+              - { name: pergunta, label: Pergunta, type: string }
+              - { name: resposta, label: Resposta, type: text }
+
+      - name: contato
+        label: Contato
+        type: object
+        fields:
+          - { name: titulo, label: Título, type: string }
+          - { name: subtitulo, label: Subtítulo, type: string }
+          - { name: texto, label: Texto, type: text }
+          - name: redes
+            label: Redes sociais
+            type: object
+            list: true
+            fields:
+              - { name: nome, label: Nome, type: string }
+              - { name: usuario, label: "Usuário ou legenda", type: string }
+              - { name: url, label: Link, type: string }
+              - name: icone
+                label: Ícone
+                type: select
+                options:
+                  values: ["telegram", "instagram", "bluesky", "x", "padrao"]

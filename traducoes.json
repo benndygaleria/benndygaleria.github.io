@@ -1,0 +1,392 @@
+{
+  "idiomas": [
+    { "codigo": "pt", "nome": "Português", "sigla": "PT" },
+    { "codigo": "en", "nome": "English", "sigla": "EN" },
+    { "codigo": "es", "nome": "Español", "sigla": "ES" }
+  ],
+  "padrao": "en",
+
+  "interface": {
+    "pt": {
+      "pular": "Pular para o conteúdo",
+      "inicio": "Início",
+      "secoes": "Seções",
+      "menu_sobre": "Sobre",
+      "menu_trabalhos": "Trabalhos",
+      "menu_processo": "Processo",
+      "menu_precos": "Preços",
+      "menu_avisos": "Avisos",
+      "menu_pedido": "Pedido",
+      "menu_faq": "Dúvidas",
+      "menu": "Menu",
+      "setlist": "Setlist de hoje",
+      "ingresso": "Ingresso · comissão",
+      "cupom_sub": "comissões · arte digital",
+      "faixa_feito": "Feito à mão (digital)",
+      "contato": "Contato",
+      "idioma": "Idioma",
+      "moeda": "Moeda",
+      "moeda_brl": "Real",
+      "moeda_usd": "Dólar",
+      "moeda_nota": "Real (R$) para quem é do Brasil · Dólar (US$) para o resto do mundo.",
+      "ver_precos": "Ver preços",
+      "ver_redes": "Ver redes",
+      "adesivo": "artista + animador",
+      "faixa_mundo": "Comissões para o mundo todo",
+      "ampliar": "Ampliar ↗",
+      "ampliar_aria": "Ampliar: {titulo}",
+      "estimativa": "estimativa",
+      "a_partir_de": "a partir de",
+      "sob_consulta": "sob consulta",
+      "cada": "cada",
+      "por_unidade": "por {unidade}",
+      "adicionais": "Adicionais",
+      "timelapse": "Timelapse",
+      "pausar_video": "Pausar vídeo",
+      "reproduzir_video": "Reproduzir vídeo",
+      "video_aria": "Vídeo do processo de uma arte, do rascunho ao final",
+      "ver_tabela_aria": "Ver exemplo de {nome} em tamanho grande",
+      "tabela_alt": "Exemplo de arte {nome}",
+      "aviso_fechado": "As comissões estão fechadas no momento. Me siga nas redes para saber quando abrirem.",
+      "direitos": "Todas as artes pertencem ao artista. Não use sem permissão.",
+      "voltar_topo": "Voltar ao topo ↑",
+      "visor": "Visualizar arte",
+      "fechar": "Fechar",
+      "anterior": "Anterior",
+      "proxima": "Próxima",
+      "montar_pedido": "Montar meu pedido ↓",
+      "pedido_estilo": "Estilo ou serviço",
+      "pedido_tamanho": "Tamanho",
+      "pedido_adicionais": "Adicionais",
+      "pedido_quantidade": "Quantidade",
+      "pedido_qtd_rotulo": "Quantos ({unidade})",
+      "pedido_menos": "Menos um",
+      "pedido_mais": "Mais um",
+      "pedido_nao_faco": "Antes de contar sua ideia, lembre que eu não faço:",
+      "pedido_ideia": "Conte sua ideia (opcional)",
+      "pedido_ideia_exemplo": "Ex.: meu OC de cabelo laranja fumando, encostado num muro pichado…",
+      "pedido_resumo": "Seu pedido",
+      "pedido_total": "Valor estimado",
+      "aviso_estimativa_titulo": "Isto é uma estimativa",
+      "aviso_estimativa_texto": "Os valores do site são aproximados, só para você ter uma ideia. O preço final depende dos detalhes do seu pedido e é sempre combinado com o Benndy antes de começar.",
+      "pedido_pagamento": "Pagamento:",
+      "pedido_fechado": "As comissões estão fechadas agora. Guarde seu pedido e envie quando abrirem!",
+      "pedido_telegram": "Enviar pelo Telegram",
+      "pedido_copiar": "Copiar pedido",
+      "pedido_copiado": "Pedido copiado! Agora é só colar no Telegram, Instagram, Bluesky ou X.",
+      "pedido_copiar_erro": "Não consegui copiar. Abra \"Ver a mensagem\", selecione o texto e copie.",
+      "pedido_ver_mensagem": "Ver a mensagem",
+      "msg_oi": "Oi, Benndy! Quero fazer uma comissão:",
+      "msg_estilo": "Estilo",
+      "msg_tamanho": "Tamanho",
+      "msg_adicionais": "Adicionais",
+      "msg_quantidade": "Quantidade",
+      "msg_ideia": "Ideia",
+      "msg_estimativa": "Estimativa do site (valor aproximado)"
+    },
+    "en": {
+      "pular": "Skip to content",
+      "inicio": "Home",
+      "secoes": "Sections",
+      "menu_sobre": "About",
+      "menu_trabalhos": "Work",
+      "menu_processo": "Process",
+      "menu_precos": "Prices",
+      "menu_avisos": "Notes",
+      "menu_pedido": "Order",
+      "menu_faq": "FAQ",
+      "menu": "Menu",
+      "setlist": "Tonight's setlist",
+      "ingresso": "Ticket · commission",
+      "cupom_sub": "commissions · digital art",
+      "faixa_feito": "Handmade (digitally)",
+      "contato": "Contact",
+      "idioma": "Language",
+      "moeda": "Currency",
+      "moeda_brl": "Real",
+      "moeda_usd": "Dollar",
+      "moeda_nota": "Reais (R$) for clients in Brazil · Dollars (US$) for the rest of the world.",
+      "ver_precos": "See prices",
+      "ver_redes": "See socials",
+      "adesivo": "artist + animator",
+      "faixa_mundo": "Commissions worldwide",
+      "ampliar": "Enlarge ↗",
+      "ampliar_aria": "Enlarge: {titulo}",
+      "estimativa": "estimate",
+      "a_partir_de": "from",
+      "sob_consulta": "price on request",
+      "cada": "each",
+      "por_unidade": "per {unidade}",
+      "adicionais": "Add-ons",
+      "timelapse": "Timelapse",
+      "pausar_video": "Pause video",
+      "reproduzir_video": "Play video",
+      "video_aria": "Video of an artwork's process, from sketch to final",
+      "ver_tabela_aria": "View the {nome} example in full size",
+      "tabela_alt": "{nome} example artwork",
+      "aviso_fechado": "Commissions are closed right now. Follow me on social media to know when they open.",
+      "direitos": "All artwork belongs to the artist. Do not use without permission.",
+      "voltar_topo": "Back to top ↑",
+      "visor": "View artwork",
+      "fechar": "Close",
+      "anterior": "Previous",
+      "proxima": "Next",
+      "montar_pedido": "Build my order ↓",
+      "pedido_estilo": "Style or service",
+      "pedido_tamanho": "Size",
+      "pedido_adicionais": "Add-ons",
+      "pedido_quantidade": "Quantity",
+      "pedido_qtd_rotulo": "How many ({unidade})",
+      "pedido_menos": "One less",
+      "pedido_mais": "One more",
+      "pedido_nao_faco": "Before describing your idea, remember I don't draw:",
+      "pedido_ideia": "Tell me your idea (optional)",
+      "pedido_ideia_exemplo": "E.g.: my orange-haired OC smoking, leaning on a graffiti wall…",
+      "pedido_resumo": "Your order",
+      "pedido_total": "Estimated price",
+      "aviso_estimativa_titulo": "This is an estimate",
+      "aviso_estimativa_texto": "Prices on the site are approximate, just to give you an idea. The final price depends on the details of your request and is always agreed with Benndy before starting.",
+      "pedido_pagamento": "Payment:",
+      "pedido_fechado": "Commissions are closed right now. Save your order and send it when they open!",
+      "pedido_telegram": "Send on Telegram",
+      "pedido_copiar": "Copy order",
+      "pedido_copiado": "Order copied! Now just paste it on Telegram, Instagram, Bluesky or X.",
+      "pedido_copiar_erro": "Couldn't copy. Open \"See the message\", select the text and copy it.",
+      "pedido_ver_mensagem": "See the message",
+      "msg_oi": "Hi, Benndy! I'd like to commission you:",
+      "msg_estilo": "Style",
+      "msg_tamanho": "Size",
+      "msg_adicionais": "Add-ons",
+      "msg_quantidade": "Quantity",
+      "msg_ideia": "Idea",
+      "msg_estimativa": "Website estimate (approximate)"
+    },
+    "es": {
+      "pular": "Saltar al contenido",
+      "inicio": "Inicio",
+      "secoes": "Secciones",
+      "menu_sobre": "Sobre mí",
+      "menu_trabalhos": "Trabajos",
+      "menu_processo": "Proceso",
+      "menu_precos": "Precios",
+      "menu_avisos": "Avisos",
+      "menu_pedido": "Pedido",
+      "menu_faq": "Dudas",
+      "menu": "Menú",
+      "setlist": "Setlist de hoy",
+      "ingresso": "Entrada · comisión",
+      "cupom_sub": "comisiones · arte digital",
+      "faixa_feito": "Hecho a mano (digital)",
+      "contato": "Contacto",
+      "idioma": "Idioma",
+      "moeda": "Moneda",
+      "moeda_brl": "Real",
+      "moeda_usd": "Dólar",
+      "moeda_nota": "Reales (R$) para clientes de Brasil · Dólares (US$) para el resto del mundo.",
+      "ver_precos": "Ver precios",
+      "ver_redes": "Ver redes",
+      "adesivo": "artista + animador",
+      "faixa_mundo": "Comisiones para todo el mundo",
+      "ampliar": "Ampliar ↗",
+      "ampliar_aria": "Ampliar: {titulo}",
+      "estimativa": "estimación",
+      "a_partir_de": "desde",
+      "sob_consulta": "a consultar",
+      "cada": "c/u",
+      "por_unidade": "por {unidade}",
+      "adicionais": "Adicionales",
+      "timelapse": "Timelapse",
+      "pausar_video": "Pausar video",
+      "reproduzir_video": "Reproducir video",
+      "video_aria": "Video del proceso de un arte, del boceto al final",
+      "ver_tabela_aria": "Ver el ejemplo de {nome} en tamaño grande",
+      "tabela_alt": "Arte de ejemplo {nome}",
+      "aviso_fechado": "Las comisiones están cerradas por ahora. Sígueme en redes para saber cuándo abren.",
+      "direitos": "Todas las artes pertenecen al artista. No las uses sin permiso.",
+      "voltar_topo": "Volver arriba ↑",
+      "visor": "Ver arte",
+      "fechar": "Cerrar",
+      "anterior": "Anterior",
+      "proxima": "Siguiente",
+      "montar_pedido": "Armar mi pedido ↓",
+      "pedido_estilo": "Estilo o servicio",
+      "pedido_tamanho": "Tamaño",
+      "pedido_adicionais": "Adicionales",
+      "pedido_quantidade": "Cantidad",
+      "pedido_qtd_rotulo": "Cuántos ({unidade})",
+      "pedido_menos": "Uno menos",
+      "pedido_mais": "Uno más",
+      "pedido_nao_faco": "Antes de contarme tu idea, recuerda que no hago:",
+      "pedido_ideia": "Cuéntame tu idea (opcional)",
+      "pedido_ideia_exemplo": "Ej.: mi OC de cabello naranja fumando, apoyado en una pared con grafitis…",
+      "pedido_resumo": "Tu pedido",
+      "pedido_total": "Valor estimado",
+      "aviso_estimativa_titulo": "Esto es una estimación",
+      "aviso_estimativa_texto": "Los valores del sitio son aproximados, solo para que tengas una idea. El precio final depende de los detalles de tu pedido y siempre se acuerda con Benndy antes de empezar.",
+      "pedido_pagamento": "Pago:",
+      "pedido_fechado": "Las comisiones están cerradas ahora. ¡Guarda tu pedido y envíalo cuando abran!",
+      "pedido_telegram": "Enviar por Telegram",
+      "pedido_copiar": "Copiar pedido",
+      "pedido_copiado": "¡Pedido copiado! Ahora solo pégalo en Telegram, Instagram, Bluesky o X.",
+      "pedido_copiar_erro": "No pude copiar. Abre \"Ver el mensaje\", selecciona el texto y cópialo.",
+      "pedido_ver_mensagem": "Ver el mensaje",
+      "msg_oi": "¡Hola, Benndy! Quiero encargar una comisión:",
+      "msg_estilo": "Estilo",
+      "msg_tamanho": "Tamaño",
+      "msg_adicionais": "Adicionales",
+      "msg_quantidade": "Cantidad",
+      "msg_ideia": "Idea",
+      "msg_estimativa": "Estimación del sitio (aproximada)"
+    }
+  },
+
+  "conteudo": {
+    "en": {
+      "artista": {
+        "descricao": "Digital artist and animator from Northeast Brazil, drawing since age 5.",
+        "detalhe": "Commissions in Brazilian reais (R$) and US dollars (US$) · Brazil and worldwide",
+        "imagemDescricao": "Green-skinned character with big orange hair, stubble and a cigarette in his mouth, art by Benndy"
+      },
+      "comissoes": { "textoAberto": "Commissions open", "textoFechado": "Commissions closed" },
+      "sobre": {
+        "etiqueta": "About",
+        "titulo": "Nice to meet you, I'm Benndy!",
+        "texto": [
+          "I'm a digital artist and animator from Northeast Brazil. I've been introspective since I was 5, when I found refuge in drawing: a place where I could let my mind go to laugh, think or cry.",
+          "Unfortunately I never trained formally in art and, over time, my gift, as my family used to say, became a hobby. I lived happy moments and sad ones, until I found love. It didn't just open my eyes, it was also the catalyst for me to open up to others.",
+          "Over time, that boy who spent hours drawing at home gained friends, companions and recognition, and got back his faith and joy. Art was never just a hobby: it's my true essence, and it's what led me to my husband and my friends. Today I keep fighting for my independence and intellectual growth, to be the best for myself and for everyone I love."
+        ],
+        "destaques": ["Artist from Northeast Brazil", "Digital illustration", "Animation", "Sketch, Flat Color and Full Rendered"]
+      },
+      "galeria": {
+        "etiqueta": "Work · 2026",
+        "titulo": "Some artwork…",
+        "subtitulo": "A small collection of what I've been drawing.",
+        "obras": [
+          { "titulo": "Lovesick sigh", "descricao": "Brown-furred canine character with a long black mane and braid, sitting on a stool with his chin in his hand, looking up with red hearts around him, on a pink background" },
+          { "titulo": "Study: blue dog", "descricao": "Study sheet of a chubby, fluffy blue and purple dog character, seen from the front and back, with a close-up of the paw prints drawn on his arm" }
+        ]
+      },
+      "processo": {
+        "etiqueta": "Behind the scenes",
+        "titulo": "From sketch to final",
+        "texto": "Here's the process of a piece I made. Enjoy!"
+      },
+      "precos": {
+        "etiqueta": "Commission prices",
+        "titulo": "Give shape to your character.",
+        "estilos": [
+          { "descricao": "Loose lines with quick color. Straightforward and full of personality.", "adicionais": [{ "nome": "Extra OC" }, { "nome": "Background" }] },
+          { "descricao": "Lineart with flat colors. Shading is an add-on.", "adicionais": [{ "nome": "Extra OC" }, { "nome": "Shading" }, { "nome": "Background" }] },
+          { "descricao": "Fully painted, with light, shading and a detailed finish.", "adicionais": [{ "nome": "Extra OC" }, { "nome": "Background" }] }
+        ],
+        "outrosTitulo": "More services",
+        "outros": [
+          { "descricao": "A complete reference sheet for your character." },
+          { "nome": "Sticker pack", "descricao": "Stickers of your character. Priced per sticker, so the pack can be as big as you want." }
+        ]
+      },
+      "pedido": {
+        "etiqueta": "Build your order",
+        "titulo": "How much would your art cost?",
+        "texto": "Pick the options and see the estimate right away. When you're done, send the ready-made order on Telegram or copy and paste it wherever you like."
+      },
+      "avisos": {
+        "titulo": "Important notes",
+        "naoFacoTitulo": "I don't draw"
+      },
+      "faq": {
+        "etiqueta": "Questions",
+        "titulo": "Frequently asked questions",
+        "perguntas": [
+          { "pergunta": "Do I pay in reais or dollars?", "resposta": "Clients in Brazil pay in reais (R$) and clients from other countries pay in US dollars (US$). Use the R$ / US$ switch in the prices section to see the prices in your currency." },
+          { "pergunta": "How do I place an order?", "resposta": "Build your order here on the site and send it on Telegram to @benndyTaxis, or message me on any of my socials. We'll talk about your idea before I start." },
+          { "pergunta": "How does the sticker pack work?", "resposta": "It's priced per sticker: you choose how many you want in the pack and the price follows the quantity." },
+          { "pergunta": "Where can I see more art?", "resposta": "On the Telegram channel Galeria Taxidermista and on my socials: Instagram, Bluesky and X." }
+        ]
+      },
+      "contato": {
+        "titulo": "Contact me!",
+        "subtitulo": "Let's bring your character to life.",
+        "texto": "Message me on Telegram or on my socials to talk about your idea. Follow the Galeria Taxidermista channel to see new art.",
+        "redes": [
+          {}, { "usuario": "Telegram channel" }, {}, {}, {}
+        ]
+      }
+    },
+
+    "es": {
+      "artista": {
+        "descricao": "Artista digital y animador del noreste de Brasil, dibujando desde los 5 años.",
+        "detalhe": "Comisiones en reales (R$) y en dólares (US$) · Brasil y todo el mundo",
+        "imagemDescricao": "Personaje de piel verde y cabello naranja voluminoso, con barba de pocos días y un cigarrillo en la boca, arte de Benndy"
+      },
+      "comissoes": { "textoAberto": "Comisiones abiertas", "textoFechado": "Comisiones cerradas" },
+      "sobre": {
+        "etiqueta": "Sobre mí",
+        "titulo": "¡Mucho gusto, soy Benndy!",
+        "texto": [
+          "Soy un artista digital y animador del noreste de Brasil. Introspectivo desde los 5 años, cuando encontré refugio en el dibujo: un lugar donde podía soltar mi mente para reír, pensar o llorar.",
+          "Lamentablemente nunca me especialicé en el área artística y, con el tiempo, mi don, como decía mi familia, se convirtió en un hobby. Viví momentos felices y momentos tristes, hasta encontrar el amor. No solo me abrió los ojos, sino que también fue el catalizador para que me abriera a los demás.",
+          "Con el tiempo, aquel niño que pasaba horas dibujando en casa ganó amigos, compañeros y prestigio, y recuperó su fe y su alegría. El arte nunca fue solo un hobby: es mi verdadera esencia, y fue lo que me hizo conocer a mi esposo y a mis amigos. Hoy sigo luchando por mi independencia y mi evolución intelectual, para ser lo mejor para mí y para todos los que amo."
+        ],
+        "destaques": ["Artista del noreste de Brasil", "Ilustración digital", "Animación", "Sketch, Flat Color y Full Rendered"]
+      },
+      "galeria": {
+        "etiqueta": "Trabajos · 2026",
+        "titulo": "Algunas artes…",
+        "subtitulo": "Una pequeña colección de lo que ando dibujando.",
+        "obras": [
+          { "titulo": "Suspiro enamorado", "descricao": "Personaje canino de pelaje marrón y melena negra larga con trenza, sentado en un taburete con la barbilla apoyada en la mano, mirando hacia arriba con corazones rojos alrededor, sobre un fondo rosa" },
+          { "titulo": "Estudio: perro azul", "descricao": "Hoja de estudio de un personaje perro azul y morado, gordito y peludo, visto de frente y de espaldas, con el detalle de las huellas dibujadas en el brazo" }
+        ]
+      },
+      "processo": {
+        "etiqueta": "Detrás de escena",
+        "titulo": "Del boceto al final",
+        "texto": "Aquí está el proceso de un arte que hice. ¡Disfrútalo!"
+      },
+      "precos": {
+        "etiqueta": "Precios de comisiones",
+        "titulo": "Dale forma a tu personaje.",
+        "estilos": [
+          { "descricao": "Trazo suelto con color rápido. Directo y lleno de personalidad.", "adicionais": [{ "nome": "OC extra" }, { "nome": "Fondo" }] },
+          { "descricao": "Lineart con colores planos. La sombra es un adicional.", "adicionais": [{ "nome": "OC extra" }, { "nome": "Sombra" }, { "nome": "Fondo" }] },
+          { "descricao": "Pintura completa, con luz, sombra y acabado detallado.", "adicionais": [{ "nome": "OC extra" }, { "nome": "Fondo" }] }
+        ],
+        "outrosTitulo": "Más servicios",
+        "outros": [
+          { "descricao": "Hoja de referencia completa de tu personaje." },
+          { "nome": "Pack de stickers", "descricao": "Stickers de tu personaje. El precio es por sticker, así que el pack es del tamaño que quieras." }
+        ]
+      },
+      "pedido": {
+        "etiqueta": "Arma tu pedido",
+        "titulo": "¿Cuánto costaría tu arte?",
+        "texto": "Elige las opciones y mira la estimación al instante. Al final, envía el pedido listo por Telegram o cópialo y pégalo donde prefieras."
+      },
+      "avisos": {
+        "titulo": "Avisos importantes",
+        "naoFacoTitulo": "No hago"
+      },
+      "faq": {
+        "etiqueta": "Dudas",
+        "titulo": "Preguntas frecuentes",
+        "perguntas": [
+          { "pergunta": "¿Pago en reales o en dólares?", "resposta": "Quien es de Brasil paga en reales (R$) y quien es de otros países paga en dólares (US$). Usa el selector R$ / US$ en la sección de precios para ver los valores en tu moneda." },
+          { "pergunta": "¿Cómo hago mi pedido?", "resposta": "Arma tu pedido aquí en el sitio y envíalo por Telegram a @benndyTaxis, o escríbeme en cualquiera de mis redes. Hablamos sobre tu idea antes de empezar." },
+          { "pergunta": "¿Cómo funciona el pack de stickers?", "resposta": "El precio es por sticker: eliges cuántos quieres en el pack y el valor acompaña la cantidad." },
+          { "pergunta": "¿Dónde veo más artes?", "resposta": "En el canal de Telegram Galeria Taxidermista y en mis redes: Instagram, Bluesky y X." }
+        ]
+      },
+      "contato": {
+        "titulo": "¡Contáctame!",
+        "subtitulo": "Demos vida a tu personaje.",
+        "texto": "Escríbeme por Telegram o en mis redes para hablar sobre tu idea. En el canal Galeria Taxidermista puedes seguir las artes nuevas.",
+        "redes": [
+          {}, { "usuario": "Canal de Telegram" }, {}, {}, {}
+        ]
+      }
+    }
+  }
+}

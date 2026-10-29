@@ -1,0 +1,163 @@
+{
+  "artista": {
+    "nome": "BenndyGaleria",
+    "descricao": "Artista digital e animador nordestino, desenhando desde os 5 anos.",
+    "detalhe": "Comissões em real (R$) e em dólar (US$) · Brasil e mundo todo",
+    "imagem": "imagens/hero.webp",
+    "imagemDescricao": "Personagem de pele verde e cabelo laranja volumoso, com barba por fazer e um cigarro na boca, arte de Benndy"
+  },
+  "comissoes": {
+    "abertas": true,
+    "textoAberto": "Comissões abertas",
+    "textoFechado": "Comissões fechadas"
+  },
+  "sobre": {
+    "etiqueta": "Sobre",
+    "titulo": "Prazer, eu sou Benndy!",
+    "texto": [
+      "Sou um artista digital e animador nordestino, de temperamento introspectivo desde os meus 5 anos, quando encontrei refúgio no desenho: um lugar onde podia soltar minha mente para rir, pensar ou chorar.",
+      "Infelizmente nunca me especializei na área artística e, com o tempo, o meu dom, assim como minha família falava, tornou-se um hobby. De momentos felizes e de momentos tristes vivi, até encontrar o amor. Ele não só abriu meus olhos, como também foi o catalisador para que eu me abrisse para os outros.",
+      "Com o tempo, aquele menino que passava horas dentro de casa desenhando ganhou amigos, companheiros e prestígio, e recuperou sua fé e alegria. A arte nunca foi só um hobby: ela é a minha real essência, e foi ela que me fez conhecer meu esposo e meus amigos. Sigo hoje lutando pela minha independência e evolução intelectual, para ser o melhor para mim e para todos que amo."
+    ],
+    "destaques": ["Artista nordestino", "Ilustração digital", "Animação", "Sketch, Flat Color e Full Rendered"],
+    "imagem": "",
+    "imagemDescricao": ""
+  },
+  "galeria": {
+    "etiqueta": "Trabalhos · 2026",
+    "titulo": "Algumas artes…",
+    "subtitulo": "Uma pequena coleção do que eu ando desenhando.",
+    "obras": [
+      {
+        "imagem": "imagens/sketch-apaixonado.jpg",
+        "titulo": "Suspiro apaixonado",
+        "descricao": "Personagem canino de pelo marrom e juba preta longa com trança, sentado num banquinho com o queixo apoiado na mão, olhando para cima com corações vermelhos em volta, num fundo rosa",
+        "estilo": "Sketch",
+        "tamanho": "Full body",
+        "ocsExtras": 0,
+        "adicionais": []
+      },
+      {
+        "imagem": "imagens/sketch-cao-azul.jpg",
+        "titulo": "Estudo: cão azul",
+        "descricao": "Folha de estudo de um personagem cachorro azul e roxo, gordinho e peludo, visto de frente e de costas, com o detalhe das patinhas desenhadas no braço",
+        "estilo": "Sketch",
+        "tamanho": "",
+        "ocsExtras": 0,
+        "adicionais": []
+      }
+    ]
+  },
+  "processo": {
+    "etiqueta": "Bastidores",
+    "titulo": "Do rascunho ao final",
+    "texto": "Aqui está o processo de uma arte que eu fiz. Aprecie!",
+    "video": ""
+  },
+  "precos": {
+    "etiqueta": "Preços de comissões",
+    "titulo": "Dê forma ao seu personagem.",
+    "estilos": [
+      {
+        "nome": "Sketch",
+        "descricao": "Traço solto com cor rápida. Direto e cheio de personalidade.",
+        "imagem": "imagens/sketch-apaixonado.jpg",
+        "itens": [
+          { "tipo": "Icon", "brl": 5, "usd": 10 },
+          { "tipo": "Half body", "brl": 10, "usd": 15 },
+          { "tipo": "Full body", "brl": 15, "usd": 20 }
+        ],
+        "adicionais": [
+          { "nome": "OC extra", "brl": 5, "usd": 10, "porUnidade": true },
+          { "nome": "Background", "brl": 5, "usd": 10, "porUnidade": false }
+        ]
+      },
+      {
+        "nome": "Flat Color",
+        "descricao": "Lineart com cores chapadas. A sombra entra como adicional.",
+        "imagem": "",
+        "itens": [
+          { "tipo": "Icon", "brl": 10, "usd": 30 },
+          { "tipo": "Half body", "brl": 20, "usd": 35 },
+          { "tipo": "Full body", "brl": 30, "usd": 40 }
+        ],
+        "adicionais": [
+          { "nome": "OC extra", "brl": 10, "usd": 20, "porUnidade": true },
+          { "nome": "Sombra", "brl": 10, "usd": 20, "porUnidade": false },
+          { "nome": "Background", "brl": 20, "usd": 20, "porUnidade": false }
+        ]
+      },
+      {
+        "nome": "Full Rendered",
+        "descricao": "Pintura completa, com luz, sombra e acabamento detalhado.",
+        "imagem": "",
+        "itens": [
+          { "tipo": "Icon", "brl": 30, "usd": 50 },
+          { "tipo": "Half body", "brl": 40, "usd": 60 },
+          { "tipo": "Full body", "brl": 60, "usd": 70 }
+        ],
+        "adicionais": [
+          { "nome": "OC extra", "brl": 20, "usd": 20, "porUnidade": true },
+          { "nome": "Background", "brl": 30, "usd": 20, "porUnidade": false }
+        ]
+      }
+    ],
+    "outrosTitulo": "Mais serviços",
+    "outros": [
+      {
+        "nome": "Ref sheet",
+        "descricao": "Ficha de referência completa do seu personagem.",
+        "imagem": "",
+        "brl": 100,
+        "usd": 80,
+        "porUnidade": false,
+        "unidade": ""
+      },
+      {
+        "nome": "Pack de stickers",
+        "descricao": "Stickers do seu personagem. O preço é por sticker, então o pack fica do tamanho que você quiser.",
+        "imagem": "",
+        "brl": 10,
+        "usd": 5,
+        "porUnidade": true,
+        "unidade": "sticker"
+      }
+    ]
+  },
+  "pedido": {
+    "etiqueta": "Monte seu pedido",
+    "titulo": "Quanto fica a sua arte?",
+    "texto": "Escolha as opções e veja a estimativa na hora. No final, é só enviar o pedido pronto pelo Telegram ou copiar e colar onde preferir.",
+    "pagamento": "",
+    "maxExtras": 0,
+    "telegram": "https://t.me/benndyTaxis"
+  },
+  "avisos": {
+    "titulo": "Avisos importantes",
+    "lista": [],
+    "naoFacoTitulo": "Não faço",
+    "naoFaco": []
+  },
+  "faq": {
+    "etiqueta": "Dúvidas",
+    "titulo": "Perguntas frequentes",
+    "perguntas": [
+      { "pergunta": "Pago em real ou em dólar?", "resposta": "Quem é do Brasil paga em real (R$) e quem é de outros países paga em dólar (US$). Use o seletor R$ / US$ na seção de preços para ver os valores na sua moeda." },
+      { "pergunta": "Como faço meu pedido?", "resposta": "Monte o pedido aqui no site e envie pelo Telegram para @benndyTaxis, ou me chame em qualquer uma das redes. A gente conversa sobre a sua ideia antes de começar." },
+      { "pergunta": "Como funciona o pack de stickers?", "resposta": "O preço é por sticker: você escolhe quantos quer no pack e o valor acompanha a quantidade." },
+      { "pergunta": "Onde vejo mais artes?", "resposta": "No canal do Telegram Galeria Taxidermista e nas redes: Instagram, Bluesky e X." }
+    ]
+  },
+  "contato": {
+    "titulo": "Contate-me!",
+    "subtitulo": "Vamos dar vida ao seu personagem.",
+    "texto": "Me chame no Telegram ou nas redes para conversar sobre a sua ideia. No canal Galeria Taxidermista você acompanha as artes novas.",
+    "redes": [
+      { "nome": "Telegram", "usuario": "@benndyTaxis", "url": "https://t.me/benndyTaxis", "icone": "telegram" },
+      { "nome": "Galeria Taxidermista", "usuario": "Canal no Telegram", "url": "https://t.me/GaleriaTaxidermista", "icone": "telegram" },
+      { "nome": "Instagram", "usuario": "@benndy_o_impostor", "url": "https://www.instagram.com/benndy_o_impostor/", "icone": "instagram" },
+      { "nome": "Bluesky", "usuario": "@benndy.bsky.social", "url": "https://bsky.app/profile/benndy.bsky.social", "icone": "bluesky" },
+      { "nome": "X (Twitter)", "usuario": "@BenndyTaxis", "url": "https://x.com/BenndyTaxis", "icone": "x" }
+    ]
+  }
+}
