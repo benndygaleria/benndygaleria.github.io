@@ -815,6 +815,140 @@
     });
   }
 
+  const semMovimento = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const mouseFino = matchMedia("(pointer: fine)").matches;
+
+
+  /* ---------------- mouse: lata de spray ---------------- */
+
+  // cada clique troca a cor da tinta: roxo, laranja, verde e vermelho
+  const CORES_SPRAY = ["157, 107, 255", "255, 138, 31", "92, 170, 50", "229, 56, 59"];
+  let corSpray = 0;
+  const lata = $("#lata-cursor");
+
+  const spray = (() => {
+    const tela = $("#rastro-cursor");
+    if (!mouseFino || semMovimento || !tela.getContext) return { ponto() {}, jato() {}, soltar() {} };
+    const ctx = tela.getContext("2d");
+    let gotas = [];                // {x, y, r, cor, vida, max, vy}
+    let rodando = false, ultimo = 0, anterior = null;
+    let leve = false;              // vira true se o computador não aguentar o efeito
+    const lentidao = [];           // duração dos últimos quadros, para perceber travamento
+
+    const ajustar = () => {
+      const dpr = Math.min(devicePixelRatio || 1, 1.5);
+      tela.width = innerWidth * dpr;
+      tela.height = innerHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    ajustar();
+    addEventListener("resize", ajustar);
+
+    // pontinhos de tinta em volta de (x, y), mais juntos no centro, como um spray de verdade
+    const borrifar = (x, y, quantos, raio, tam) => {
+      const cor = CORES_SPRAY[corSpray];
+      for (let i = 0; i < quantos; i++) {
+        const ang = Math.random() * Math.PI * 2, dist = Math.pow(Math.random(), 1.8) * raio;
+        gotas.push({ x: x + Math.cos(ang) * dist, y: y + Math.sin(ang) * dist, r: Math.random() * tam + 0.5, cor, vida: 0, max: 650 + Math.random() * 450, vy: 0 });
+      }
+      if (gotas.length > 1500) gotas.splice(0, gotas.length - 1500);
+    };
+
+    // se a animação ficar abaixo de ~30 quadros por segundo, desliga o spray (fica só a lata)
+    const vigiar = (bruto) => {
+      lentidao.push(bruto);
+      if (lentidao.length > 40) lentidao.shift();
+      if (lentidao.length < 40) return;
+      const media = lentidao.reduce((s, v) => s + v, 0) / lentidao.length;
+      if (media > 34) {
+        leve = true;
+        gotas = [];
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+        document.documentElement.classList.add("efeitos-leves");
+      }
+    };
+
+    const desenhar = (agora) => {
+      const bruto = agora - (ultimo || agora);
+      const dt = Math.min(bruto, 50);
+      if (ultimo && bruto < 500) vigiar(bruto);
+      ultimo = agora;
+      if (leve) { rodando = false; ultimo = 0; return; }
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+      gotas = gotas.filter((g) => (g.vida += dt) < g.max);
+      for (const g of gotas) {
+        // as gotas grandes do clique escorrem devagar
+        if (g.vy) { g.y += g.vy * dt * 0.06; g.vy *= 0.985; }
+        const vida = 1 - g.vida / g.max;
+        ctx.fillStyle = `rgba(${g.cor}, ${Math.min(1, vida * 1.4) * 0.85})`;
+        ctx.beginPath();
+        ctx.arc(g.x, g.y, g.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      rodando = gotas.length > 0;
+      if (rodando) requestAnimationFrame(desenhar);
+      else { ultimo = 0; ctx.clearRect(0, 0, innerWidth, innerHeight); }
+    };
+    const animar = () => { if (!rodando) { rodando = true; requestAnimationFrame(desenhar); } };
+
+    return {
+      ponto(x, y) {
+        if (leve) return;
+        if (anterior) {
+          // preenche o caminho entre um movimento e outro, para o traço não sair falhado
+          const passos = Math.min(8, Math.ceil(Math.hypot(x - anterior.x, y - anterior.y) / 7));
+          for (let i = 1; i <= passos; i++) borrifar(anterior.x + ((x - anterior.x) * i) / passos, anterior.y + ((y - anterior.y) * i) / passos, 3, 8, 1.3);
+        }
+        anterior = { x, y };
+        animar();
+      },
+      jato(x, y) {
+        if (leve) return;
+        borrifar(x, y, 70, 26, 2.4);
+        const cor = CORES_SPRAY[corSpray];
+        for (let i = 0; i < 4; i++) gotas.push({ x: x + (Math.random() - 0.5) * 30, y: y + Math.random() * 10, r: 2.2 + Math.random() * 2, cor, vida: 0, max: 1300 + Math.random() * 600, vy: 0.8 + Math.random() * 1.2 });
+        animar();
+      },
+      soltar() { anterior = null; }
+    };
+  })();
+
+  if (mouseFino) {
+    const pintarLata = () => lata.style.setProperty("--tinta-spray", `rgb(${CORES_SPRAY[corSpray]})`);
+    pintarLata();
+
+    addEventListener("pointermove", (ev) => {
+      if (ev.pointerType !== "mouse") return;
+      // janelas abertas (visor, aviso +18) ficam por cima de tudo, então a lata vai junto para dentro delas
+      const casa = $("dialog[open]") || document.body;
+      if (lata.parentElement !== casa) casa.append($("#rastro-cursor"), lata);
+      // a lata fica exatamente na ponta do mouse (sem atraso)
+      lata.style.setProperty("--ax", `${ev.clientX}px`);
+      lata.style.setProperty("--ay", `${ev.clientY}px`);
+      spray.ponto(ev.clientX, ev.clientY);
+      document.documentElement.classList.add("com-lata");
+      lata.classList.add("ativa");
+      // sobre links e botões a lata cresce e inclina um pouco
+      lata.classList.toggle("sobre-link", !!ev.target.closest?.("a, button, select, label, [data-grupo]"));
+    }, { passive: true });
+
+    addEventListener("pointerdown", (ev) => {
+      if (ev.pointerType !== "mouse") return;
+      corSpray = (corSpray + 1) % CORES_SPRAY.length;
+      pintarLata();
+      spray.jato(ev.clientX, ev.clientY);
+      // a lata chacoalha (reinicia a animação a cada clique)
+      lata.classList.remove("pintando");
+      void lata.offsetWidth;
+      lata.classList.add("pintando");
+    });
+    lata.addEventListener("animationend", () => lata.classList.remove("pintando"));
+    document.documentElement.addEventListener("mouseleave", () => {
+      lata.classList.remove("ativa");
+      spray.soltar();
+    });
+  }
+
   /* ---------------- troca de idioma ---------------- */
 
   $("#idioma").addEventListener("change", (ev) => {

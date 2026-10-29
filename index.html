@@ -30,7 +30,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Bowlby+One&family=Permanent+Marker&family=Rubik+Spray+Paint&family=Special+Elite&display=swap">
 <!-- o "?v=" força os navegadores a baixar a versão nova; aumente o número quando mudar o CSS ou o JS -->
-<link rel="stylesheet" href="estilo.css?v=11">
+<link rel="stylesheet" href="estilo.css?v=12">
 </head>
 <body>
 
@@ -241,6 +241,23 @@
   </main>
 </div>
 
+<!-- efeitos do mouse: lata de spray que pinta pontinhos por onde passa (cada clique troca a cor da tinta) -->
+<canvas class="rastro-cursor" id="rastro-cursor" aria-hidden="true"></canvas>
+<div class="lata-cursor" id="lata-cursor" aria-hidden="true">
+  <svg viewBox="0 0 40 40">
+    <!-- a lata é desenhada com o bico para cima e girada; o ponto (3,3) é a ponta do mouse -->
+    <g transform="translate(3 3) rotate(-45)">
+      <g class="lata-mexer">
+        <path class="lata-bico" d="M-1.6 0H1.6V3.5H-1.6Z"/>
+        <path class="lata-tampa" d="M-4.6 3.5H4.6V9.5H-4.6Z"/>
+        <path class="lata-corpo" d="M-6.5 9.5H6.5V36Q6.5 38.5 4 38.5H-4Q-6.5 38.5-6.5 36Z"/>
+        <path class="lata-rotulo" d="M-6.5 17H6.5V29H-6.5Z"/>
+        <path class="lata-brilho" d="M-3.8 12V35"/>
+      </g>
+    </g>
+  </svg>
+</div>
+
 <div class="erro" id="erro" hidden>
   <p><strong>Não consegui carregar o conteúdo.</strong> Confira se os arquivos conteudo.json e traducoes.json estão na mesma pasta e sem erros de digitação (uma vírgula ou aspas faltando já quebra o arquivo).</p>
 </div>
@@ -282,6 +299,6 @@
   </symbol>
 </svg>
 
-<script src="script.js?v=11"></script>
+<script src="script.js?v=12"></script>
 </body>
 </html>

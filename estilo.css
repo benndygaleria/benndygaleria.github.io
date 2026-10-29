@@ -775,3 +775,37 @@ main {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* ---------- mouse: lata de spray ---------- */
+
+html.com-lata, html.com-lata * { cursor: none !important; }
+.lata-cursor {
+  --tinta-spray: #A97BFF;   /* o script troca a cor a cada clique */
+  position: fixed; left: 0; top: 0; z-index: 100;
+  width: 40px; height: 40px;
+  pointer-events: none;
+  opacity: 0;
+  /* 3px = onde fica o bico da lata dentro do desenho */
+  transform: translate3d(calc(var(--ax, -99px) - 3px), calc(var(--ay, -99px) - 3px), 0);
+  transition: opacity .25s ease;
+  filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, .6));
+  will-change: transform;
+}
+.lata-cursor.ativa { opacity: 1; }
+.lata-cursor svg { width: 100%; height: 100%; overflow: visible; display: block; }
+.lata-mexer { transform-box: view-box; transform-origin: 0 0; transition: transform .2s var(--suave); }
+.lata-cursor path { stroke: var(--preto); stroke-width: 1.2; stroke-linejoin: round; }
+.lata-bico { fill: var(--preto); }
+.lata-tampa { fill: var(--tinta-spray); }
+.lata-corpo { fill: #D9D4CC; }
+.lata-rotulo { fill: var(--tinta-spray); }
+.lata-cursor .lata-brilho { fill: none; stroke: rgba(255, 255, 255, .8); stroke-width: 1.6; stroke-linecap: round; }
+.lata-cursor.sobre-link .lata-mexer { transform: scale(1.15) rotate(-10deg); }
+.lata-cursor.pintando .lata-mexer { animation: lata-chacoalha .35s ease; }
+@keyframes lata-chacoalha {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(14deg) translateY(2px); }
+  50% { transform: rotate(-10deg); }
+  75% { transform: rotate(6deg); }
+}
+.rastro-cursor { position: fixed; inset: 0; z-index: 99; width: 100vw; height: 100vh; pointer-events: none; }
