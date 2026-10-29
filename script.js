@@ -177,7 +177,7 @@
       const unidade = iOutro >= 0 ? d.precos.outros[iOutro].unidade : "";
       const detalhe = q && unidade ? `${q} ${unidade}${q > 1 ? "s" : ""}` : o.tamanho;
       const tipo = [base.estilo ? nomeServico(base.estilo, d) : "", detalhe].filter(Boolean).join(" · ");
-      return { cat, src: o.imagem, titulo: o.titulo, alt: o.descricao || o.titulo, tipo, preco: textoPreco(estimar(base, d), t) };
+      return { cat, src: o.imagem, titulo: o.titulo, alt: o.descricao || o.titulo, tipo, preco: textoPreco(estimar(base, d), t), adulto: !!base.adulto };
     });
     if (filtro !== "todos" && !categorias.some((c) => c.id === filtro)) filtro = "todos";
 
@@ -206,9 +206,10 @@
 
     $("#mural").innerHTML = capa + itensGaleria
       .map((it, i) => `
-      <figure class="peca" data-cat="${esc(it.cat)}">
-        <button class="peca-botao" type="button" data-grupo="galeria" data-indice="${i}" aria-label="${esc(preencher(t.ampliar_aria, { titulo: it.titulo }))}">
+      <figure class="peca${it.adulto ? " peca-adulta" : ""}" data-cat="${esc(it.cat)}">
+        <button class="peca-botao" type="button" data-grupo="galeria" data-indice="${i}" aria-label="${esc(preencher(it.adulto ? t.adulto_aria : t.ampliar_aria, { titulo: it.titulo }))}">
           <img src="${esc(it.src)}" alt="${esc(it.alt)}" loading="lazy" decoding="async">
+          ${it.adulto ? `<span class="selo-adulto" aria-hidden="true"><b>${esc(t.adulto_selo)}</b><small>${esc(t.adulto_toque)}</small></span>` : ""}
           <span class="peca-legenda">
             <span class="peca-titulo">${esc(it.titulo)}</span>
             <span class="peca-meta">${it.tipo ? `<span class="peca-estilo">${esc(it.tipo)}</span>` : ""}<b>${esc(it.preco)}</b></span>
@@ -710,6 +711,27 @@
 
   /* ---------------- visor de imagens ---------------- */
 
+  // artes +18 ficam borradas até o visitante confirmar a idade (a resposta fica guardada neste navegador)
+  let maior18 = false;
+  try { maior18 = localStorage.getItem("maior18") === "sim"; } catch {}
+  document.documentElement.classList.toggle("maior18", maior18);
+
+  function confirmarIdade() {
+    if (maior18) return Promise.resolve(true);
+    const aviso = $("#aviso-adulto");
+    if (!aviso.showModal) return Promise.resolve(false);
+    aviso.returnValue = "";
+    aviso.showModal();
+    return new Promise((ok) => aviso.addEventListener("close", () => {
+      maior18 = aviso.returnValue === "sim";
+      if (maior18) {
+        document.documentElement.classList.add("maior18");
+        try { localStorage.setItem("maior18", "sim"); } catch {}
+      }
+      ok(maior18);
+    }, { once: true }));
+  }
+
   function ativarVisor() {
     const visor = $("#visor");
     let grupo = [];
@@ -727,13 +749,14 @@
       $$(".visor-seta", visor).forEach((b) => (b.hidden = grupo.length < 2));
     };
 
-    document.addEventListener("click", (ev) => {
+    document.addEventListener("click", async (ev) => {
       const alvo = ev.target.closest("[data-grupo]");
       if (!alvo || !visor.showModal) return;
+      if (alvo.closest(".peca-adulta") && !(await confirmarIdade())) return alvo.focus();
       let inicio = Number(alvo.dataset.indice);
       if (alvo.dataset.grupo === "galeria") {
-        // na galeria, o visor passa só pelas artes do filtro escolhido
-        const visiveis = $$("#mural .peca:not([hidden]) [data-indice]").map((b) => Number(b.dataset.indice));
+        // na galeria, o visor passa só pelas artes do filtro escolhido (e as +18 só depois de confirmar a idade)
+        const visiveis = $$(`#mural .peca:not([hidden])${maior18 ? "" : ":not(.peca-adulta)"} [data-indice]`).map((b) => Number(b.dataset.indice));
         grupo = visiveis.map((i) => itensGaleria[i]);
         inicio = visiveis.indexOf(inicio);
       } else {

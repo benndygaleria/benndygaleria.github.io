@@ -67,6 +67,7 @@ content:
               - { name: ocsExtras, label: OCs extras, type: number }
               - { name: adicionais, label: "Adicionais marcados (ex.: Background, Sombra)", type: string, list: true }
               - { name: quantidade, label: "Quantidade (só para stickers)", type: number }
+              - { name: adulto, label: "Conteúdo +18 (a arte fica borrada até a pessoa confirmar que é maior de idade)", type: boolean }
               - { name: precoManualBRL, label: "Preço manual em R$ (opcional; substitui a estimativa)", type: string }
               - { name: precoManualUSD, label: "Preço manual em US$ (opcional; substitui a estimativa)", type: string }
               - { name: itens, label: "O que foi feito (opcional; um item por linha, substitui a conta embaixo da arte)", type: string, list: true }

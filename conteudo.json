@@ -61,6 +61,44 @@
         "adicionais": ["Background"]
       },
       {
+        "imagem": "imagens/render-alana-18.jpg",
+        "titulo": "Alana sob o sol (+18)",
+        "descricao": "Versão sem censura de Alana sob o sol, com nudez: a mesma personagem réptil vermelha de listras pretas, vista de baixo com as mãos na cintura contra o céu azul",
+        "estilo": "Full Rendered",
+        "tamanho": "Half body",
+        "ocsExtras": 0,
+        "adicionais": ["Background"],
+        "adulto": true
+      },
+      {
+        "imagem": "imagens/flat-pendragon.jpg",
+        "titulo": "Pendragon",
+        "descricao": "Personagem touro de chifres com anéis dourados e uma enorme barba branca trançada, vestindo túnica marrom, faixa vermelha listrada e braçadeiras de couro, de corpo inteiro sobre fundo bege",
+        "estilo": "Flat Color",
+        "tamanho": "Full body",
+        "ocsExtras": 0,
+        "adicionais": ["Sombra"]
+      },
+      {
+        "imagem": "imagens/flat-visita.jpg",
+        "titulo": "Visita noturna",
+        "descricao": "Cena noturna num quarto iluminado pela lua cheia: uma criatura magenta de bolinhas, apoiada num banquinho de rodinhas, se lança sobre um personagem ruivo de cueca de corações deitado na cama",
+        "estilo": "Flat Color",
+        "tamanho": "Full body",
+        "ocsExtras": 1,
+        "adicionais": ["Sombra", "Background"]
+      },
+      {
+        "imagem": "imagens/flat-moxie-18.jpg",
+        "titulo": "Moxie (+18)",
+        "descricao": "Personagem felina gordinha de pelo bege com listras vermelhas e cabelo azul ondulado, nua, de corpo inteiro sobre fundo bege",
+        "estilo": "Flat Color",
+        "tamanho": "Full body",
+        "ocsExtras": 0,
+        "adicionais": ["Sombra"],
+        "adulto": true
+      },
+      {
         "imagem": "imagens/sketch-apaixonado.jpg",
         "titulo": "Suspiro apaixonado",
         "descricao": "Personagem canino de pelo marrom e juba preta longa com trança, sentado num banquinho com o queixo apoiado na mão, olhando para cima com corações vermelhos em volta, num fundo rosa",
@@ -128,7 +166,7 @@
       {
         "nome": "Flat Color",
         "descricao": "Lineart com cores chapadas. A sombra entra como adicional.",
-        "imagem": "",
+        "imagem": "imagens/flat-pendragon.jpg",
         "itens": [
           { "tipo": "Icon", "brl": 10, "usd": 30 },
           { "tipo": "Half body", "brl": 20, "usd": 35 },

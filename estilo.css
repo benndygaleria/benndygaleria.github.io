@@ -330,6 +330,41 @@ main {
   .peca-legenda { opacity: 1; transform: none; }
 }
 
+/* arte +18: fica borrada até o visitante confirmar a idade */
+.peca-adulta img { filter: blur(28px) brightness(.55) saturate(.7); transform: scale(1.2); }
+.selo-adulto {
+  position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px;
+  padding: 16px; text-align: center; pointer-events: none;
+}
+.selo-adulto b {
+  padding: 6px 12px 4px; background: var(--laranja); color: var(--escuro);
+  font: 400 1.5rem/1 var(--fonte-titulo); transform: rotate(-3deg); box-shadow: 4px 4px 0 var(--preto);
+}
+.selo-adulto small { font: 400 .95rem var(--fonte-maquina); color: var(--texto); }
+/* no celular a legenda fica sempre à mostra, então o selo sobe para o topo */
+@media (hover: none) {
+  .selo-adulto { place-content: start center; padding-top: 18px; }
+  .selo-adulto b { font-size: 1.05rem; }
+  .selo-adulto small { font-size: .8rem; }
+}
+.maior18 .peca-adulta img { filter: none; transform: none; }
+.maior18 .selo-adulto { display: none; }
+
+.aviso-adulto {
+  width: min(440px, calc(100% - 32px)); margin: auto; padding: 28px 26px 26px;
+  border: var(--borda); background: var(--cartao); color: var(--texto);
+  box-shadow: 10px 10px 0 var(--laranja); text-align: center;
+}
+.aviso-adulto[open] { animation: entra .3s var(--suave); }
+.aviso-adulto::backdrop { background: rgba(7, 5, 4, .88); }
+.aviso-adulto-selo {
+  display: inline-block; margin: 0 0 12px; padding: 6px 14px 4px;
+  background: var(--laranja); color: var(--escuro); font: 400 2rem/1 var(--fonte-titulo); transform: rotate(-3deg);
+}
+.aviso-adulto h2 { margin: 0 0 8px; font: 400 1.6rem/1.1 var(--fonte-titulo); }
+.aviso-adulto p:not(.aviso-adulto-selo) { margin: 0 0 22px; font-family: var(--fonte-maquina); color: var(--texto-2); }
+.aviso-adulto-botoes { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+
 /* capa: o primeiro "quadro" do mural apresenta o artista */
 .capa {
   break-inside: avoid; margin: 0 0 22px;

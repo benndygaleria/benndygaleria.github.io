@@ -30,7 +30,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Bowlby+One&family=Permanent+Marker&family=Rubik+Spray+Paint&family=Special+Elite&display=swap">
 <!-- o "?v=" força os navegadores a baixar a versão nova; aumente o número quando mudar o CSS ou o JS -->
-<link rel="stylesheet" href="estilo.css?v=8">
+<link rel="stylesheet" href="estilo.css?v=9">
 </head>
 <body>
 
@@ -257,6 +257,18 @@
   <button class="visor-seta visor-proxima" type="button" data-visor="proxima" data-i18n-aria="proxima" aria-label="Próxima">→</button>
 </dialog>
 
-<script src="script.js?v=8"></script>
+<dialog class="aviso-adulto" id="aviso-adulto" aria-labelledby="aviso-adulto-titulo">
+  <form method="dialog">
+    <p class="aviso-adulto-selo" aria-hidden="true">+18</p>
+    <h2 id="aviso-adulto-titulo" data-i18n="adulto_titulo">Conteúdo adulto</h2>
+    <p data-i18n="adulto_texto">Esta arte tem nudez. Só continue se você tiver 18 anos ou mais.</p>
+    <div class="aviso-adulto-botoes">
+      <button class="botao" value="sim" data-i18n="adulto_sim">Tenho 18 anos ou mais</button>
+      <button class="botao botao-contorno" value="nao" data-i18n="adulto_nao">Voltar</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="script.js?v=9"></script>
 </body>
 </html>
