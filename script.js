@@ -13,6 +13,7 @@
 
   const esc = (texto) =>
     String(texto ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const linkSeguro = (url) => (/^https?:\/\//i.test(String(url ?? "").trim()) ? String(url).trim() : "#");
   const pegar = (obj, caminho) => caminho.split(".").reduce((o, k) => (o == null ? o : o[k]), obj);
   const normalizar = (t) => String(t ?? "").toLowerCase().replace(/[\s()-]/g, "");
   const preencher = (modelo, dados) => String(modelo ?? "").replace(/\{(\w+)\}/g, (_, k) => dados[k] ?? "");
@@ -78,10 +79,10 @@
   // quem vê o site em português começa em real; nos outros idiomas, em dólar
   function escolherMoeda() {
     const daUrl = new URLSearchParams(location.search).get("moeda");
-    if (daUrl in MOEDAS) { moedaEscolhida = true; return daUrl; }
+    if (Object.hasOwn(MOEDAS, daUrl ?? "")) { moedaEscolhida = true; return daUrl; }
     try {
       const salva = localStorage.getItem("moeda");
-      if (salva in MOEDAS) { moedaEscolhida = true; return salva; }
+      if (Object.hasOwn(MOEDAS, salva ?? "")) { moedaEscolhida = true; return salva; }
     } catch {}
     return idioma === "pt" ? "brl" : "usd";
   }
@@ -366,13 +367,13 @@
 
     const redes = d.contato?.redes || [];
     $("#redes").innerHTML = redes
-      .map((r) => `<li><a href="${esc(r.url)}" target="_blank" rel="noopener">
+      .map((r) => `<li><a href="${esc(linkSeguro(r.url))}" target="_blank" rel="noopener">
           <span class="rede-icone">${icone(r)}</span>
           <span><span class="rede-nome">${esc(r.nome)}</span><span class="rede-usuario">${esc(r.usuario)}</span></span>
         </a></li>`)
       .join("");
     $("#lombada-redes").innerHTML = redes
-      .map((r) => `<li><a href="${esc(r.url)}" target="_blank" rel="noopener" aria-label="${esc(`${r.nome} ${r.usuario}`)}" title="${esc(r.nome)}">${icone(r)}</a></li>`)
+      .map((r) => `<li><a href="${esc(linkSeguro(r.url))}" target="_blank" rel="noopener" aria-label="${esc(`${r.nome} ${r.usuario}`)}" title="${esc(r.nome)}">${icone(r)}</a></li>`)
       .join("");
   }
 
@@ -557,7 +558,8 @@
     // mensagem pronta + link do Telegram
     const msg = mensagemPedido(est);
     $("#pedido-mensagem").textContent = msg;
-    const telegram = BASE.pedido?.telegram || (BASE.contato?.redes || []).find((r) => normalizar(r.icone || r.nome) === "telegram")?.url;
+    const achado = BASE.pedido?.telegram || (BASE.contato?.redes || []).find((r) => normalizar(r.icone || r.nome) === "telegram")?.url;
+    const telegram = achado && linkSeguro(achado) !== "#" ? linkSeguro(achado) : "";
     const botaoTelegram = $("#pedido-telegram");
     botaoTelegram.hidden = !telegram;
     if (telegram) botaoTelegram.href = `${telegram}${telegram.includes("?") ? "&" : "?"}text=${encodeURIComponent(msg)}`;
