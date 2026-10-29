@@ -30,7 +30,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Bowlby+One&family=Permanent+Marker&family=Rubik+Spray+Paint&family=Special+Elite&display=swap">
 <!-- o "?v=" força os navegadores a baixar a versão nova; aumente o número quando mudar o CSS ou o JS -->
-<link rel="stylesheet" href="estilo.css?v=9">
+<link rel="stylesheet" href="estilo.css?v=10">
 </head>
 <body>
 
@@ -110,6 +110,7 @@
         <div class="rolagem"><table class="tabela-precos" id="tabela-precos"></table></div>
         <h3 class="quadro-subtitulo" data-i18n="adicionais">Adicionais</h3>
         <div class="rolagem"><table class="tabela-precos tabela-extras" id="tabela-extras"></table></div>
+        <p class="dica-personagens" id="nota-personagens" data-i18n="dica_personagens" hidden></p>
       </div>
 
       <div class="outros" id="outros">
@@ -155,6 +156,7 @@
 
           <fieldset class="passo" data-passo="extras" hidden>
             <legend class="passo-pergunta" tabindex="-1" data-i18n="pergunta_extras">Algum extra?</legend>
+            <p class="dica-personagens" id="dica-personagens" data-i18n="dica_personagens" hidden></p>
             <div class="opcoes-pilula" id="opcoes-adicionais"></div>
             <div class="contadores" id="contadores-adicionais"></div>
             <div class="contadores" id="contador-quantidade"></div>
@@ -269,6 +271,6 @@
   </form>
 </dialog>
 
-<script src="script.js?v=9"></script>
+<script src="script.js?v=10"></script>
 </body>
 </html>

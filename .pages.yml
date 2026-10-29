@@ -108,10 +108,10 @@ content:
                 type: object
                 list: true
                 fields:
-                  - { name: nome, label: "Nome (OC extra, Sombra, Background...)", type: string }
+                  - { name: nome, label: "Nome (Personagem extra, Sombra, Background...)", type: string }
                   - { name: brl, label: "Preço em R$", type: number }
                   - { name: usd, label: "Preço em US$", type: number }
-                  - { name: porUnidade, label: "Cobra por unidade? (ex.: cada OC extra)", type: boolean }
+                  - { name: porUnidade, label: "Cobra por unidade? (ex.: cada personagem extra)", type: boolean }
           - { name: outrosTitulo, label: "Título de 'Mais serviços'", type: string }
           - name: outros
             label: Mais serviços

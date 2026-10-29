@@ -159,7 +159,7 @@
           { "tipo": "Full body", "brl": 15, "usd": 20 }
         ],
         "adicionais": [
-          { "nome": "OC extra", "brl": 5, "usd": 10, "porUnidade": true },
+          { "nome": "Personagem extra", "brl": 5, "usd": 10, "porUnidade": true },
           { "nome": "Background", "brl": 5, "usd": 10, "porUnidade": false }
         ]
       },
@@ -173,7 +173,7 @@
           { "tipo": "Full body", "brl": 30, "usd": 40 }
         ],
         "adicionais": [
-          { "nome": "OC extra", "brl": 10, "usd": 20, "porUnidade": true },
+          { "nome": "Personagem extra", "brl": 10, "usd": 20, "porUnidade": true },
           { "nome": "Sombra", "brl": 10, "usd": 20, "porUnidade": false },
           { "nome": "Background", "brl": 20, "usd": 20, "porUnidade": false }
         ]
@@ -188,7 +188,7 @@
           { "tipo": "Full body", "brl": 60, "usd": 70 }
         ],
         "adicionais": [
-          { "nome": "OC extra", "brl": 20, "usd": 20, "porUnidade": true },
+          { "nome": "Personagem extra", "brl": 20, "usd": 20, "porUnidade": true },
           { "nome": "Background", "brl": 30, "usd": 20, "porUnidade": false }
         ]
       }

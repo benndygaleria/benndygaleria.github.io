@@ -52,7 +52,7 @@ Abra `conteudo.json` no GitHub, clique no lápis (✏️), edite e clique em **C
 { "tipo": "Half body", "brl": 20, "usd": 35 }
 ```
 
-**Adicionais:** ficam dentro de cada estilo, em `"adicionais"`. Com `"porUnidade": true` o site mostra um contador (ex.: 2× OC extra). Com `false` é só marcar ou desmarcar (ex.: Background, Sombra).
+**Adicionais:** ficam dentro de cada estilo, em `"adicionais"`. Com `"porUnidade": true` o site mostra um contador (ex.: 2× Personagem extra). Com `false` é só marcar ou desmarcar (ex.: Background, Sombra).
 
 **Colocar a arte de exemplo de cada estilo:** envie a imagem para `imagens/` e preencha `"imagem"` no estilo (ex.: `"imagens/exemplo-sketch.jpg"`). Enquanto estiver vazio, aparece o nome do estilo em letras grandes.
 

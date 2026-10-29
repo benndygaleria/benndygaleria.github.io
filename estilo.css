@@ -559,6 +559,13 @@ main {
 .pilula:has(input[type="checkbox"]:checked)::before { content: "✕"; background: var(--escuro); color: var(--amarelo); border-color: var(--escuro); }
 
 .contadores { display: flex; flex-direction: column; gap: 12px; }
+/* "o preço já inclui 1 personagem" */
+.dica-personagens {
+  max-width: 560px; margin: 0; padding: 10px 14px 10px 16px;
+  border-left: 5px solid var(--roxo); background: var(--cartao-2);
+  font: 400 1rem/1.4 var(--fonte-maquina); color: var(--texto);
+}
+.quadro-precos .dica-personagens { margin-top: 14px; max-width: none; }
 .contadores:empty { display: none; }
 .contador-linha {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px;

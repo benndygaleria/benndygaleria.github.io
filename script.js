@@ -275,6 +275,7 @@
     const caixaExtras = $("#tabela-extras").closest(".rolagem");
     caixaExtras.hidden = !extras.length;
     caixaExtras.previousElementSibling.hidden = !extras.length;
+    $("#nota-personagens").hidden = !estilos.some((e) => (e.adicionais || []).some((a) => a.porUnidade));
     $("#tabela-extras").innerHTML = `
       <thead><tr><th scope="col"><span class="so-leitor">${esc(t.adicionais)}</span></th>${estilos.map((e, i) => `<th scope="col" style="--cor:${CORES[i % CORES.length]}"><span class="estilo-nome">${esc(nomes[i].nome)}</span></th>`).join("")}</tr></thead>
       <tbody>${extras
@@ -398,9 +399,9 @@
     return `<div class="contador-linha" data-contador-caixa="${id}" data-min="${min}" data-max="${max}">
       <span class="contador-rotulo">${esc(rotulo)} <small>${esc(dica)}</small></span>
       <div class="contador">
-        <button type="button" class="contador-botao" data-contador="${id}" data-passo="-1" aria-label="${esc(`${t.pedido_menos}: ${rotulo}`)}"${valor <= min ? " disabled" : ""}>−</button>
+        <button type="button" class="contador-botao" data-contador="${id}" data-delta="-1" aria-label="${esc(`${t.pedido_menos}: ${rotulo}`)}"${valor <= min ? " disabled" : ""}>−</button>
         <output aria-live="polite">${valor}</output>
-        <button type="button" class="contador-botao" data-contador="${id}" data-passo="1" aria-label="${esc(`${t.pedido_mais}: ${rotulo}`)}"${valor >= max ? " disabled" : ""}>+</button>
+        <button type="button" class="contador-botao" data-contador="${id}" data-delta="1" aria-label="${esc(`${t.pedido_mais}: ${rotulo}`)}"${valor >= max ? " disabled" : ""}>+</button>
       </div>
     </div>`;
   }
@@ -462,6 +463,7 @@
           <span>${esc(s.d.adicionais[j].nome)}</span><small>+ ${esc(dinheiro(preco(a)))}</small>
         </label>`))
       .join("");
+    $("#dica-personagens").hidden = !adicionais.some((a) => a.porUnidade);
     $("#contadores-adicionais").innerHTML = adicionais
       .map((a, j) => (a.porUnidade ? contador(`a:${normalizar(a.nome)}`, s.d.adicionais[j].nome, `+ ${dinheiro(preco(a))} ${t.cada}`, pedido.adicionais[normalizar(a.nome)] || 0, 0, maxExtras()) : ""))
       .join("");
@@ -548,8 +550,8 @@
       const id = caixa.dataset.contadorCaixa;
       const valor = id === "quantidade" ? pedido.quantidade : pedido.adicionais[id.slice(2)] || 0;
       $("output", caixa).textContent = valor;
-      $('[data-passo="-1"]', caixa).disabled = valor <= Number(caixa.dataset.min);
-      $('[data-passo="1"]', caixa).disabled = valor >= Number(caixa.dataset.max);
+      $('[data-delta="-1"]', caixa).disabled = valor <= Number(caixa.dataset.min);
+      $('[data-delta="1"]', caixa).disabled = valor >= Number(caixa.dataset.max);
     });
   }
 
@@ -587,7 +589,7 @@
       const caixa = botao.closest("[data-contador-caixa]");
       const id = botao.dataset.contador;
       const atual = id === "quantidade" ? pedido.quantidade : pedido.adicionais[id.slice(2)] || 0;
-      const novo = Math.min(Number(caixa.dataset.max), Math.max(Number(caixa.dataset.min), atual + Number(botao.dataset.passo)));
+      const novo = Math.min(Number(caixa.dataset.max), Math.max(Number(caixa.dataset.min), atual + Number(botao.dataset.delta)));
       if (id === "quantidade") pedido.quantidade = novo;
       else pedido.adicionais[id.slice(2)] = novo;
       atualizarContadores();
