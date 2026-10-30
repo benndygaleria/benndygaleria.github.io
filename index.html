@@ -31,7 +31,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Bowlby+One&family=Permanent+Marker&family=Rubik+Spray+Paint&family=Special+Elite&display=swap">
 <!-- o "?v=" força os navegadores a baixar a versão nova; aumente o número quando mudar o CSS ou o JS -->
-<link rel="stylesheet" href="estilo.css?v=18">
+<link rel="stylesheet" href="estilo.css?v=19">
 </head>
 <body>
 
@@ -245,8 +245,10 @@
 
   </main>
 
-  <!-- os filhos do Benndy, sempre à mostra no canto inferior direito -->
-  <img class="filhos-canto" src="imagens/filhos.webp" width="1400" height="776" alt="" data-i18n-alt="filhos_alt" decoding="async">
+  <!-- os filhos do Benndy, sempre à mostra no canto inferior direito; um clique toca o assobio -->
+  <button class="filhos-canto" id="filhos-canto" type="button" data-i18n-aria="filhos_assobio" aria-label="Tocar o assobio dos filhos do Benndy">
+    <img src="imagens/filhos.webp" width="1400" height="776" alt="" decoding="async">
+  </button>
 </div>
 
 <!-- efeitos do mouse: lata de spray que pinta pontinhos por onde passa (cada clique troca a cor da tinta) -->
@@ -308,6 +310,6 @@
   </symbol>
 </svg>
 
-<script src="script.js?v=17"></script>
+<script src="script.js?v=18"></script>
 </body>
 </html>
