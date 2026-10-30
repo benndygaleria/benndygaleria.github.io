@@ -750,6 +750,7 @@
     // textos fixos da interface
     $$("[data-i18n]").forEach((el) => { if (t[el.dataset.i18n] != null) el.textContent = t[el.dataset.i18n]; });
     $$("[data-i18n-aria]").forEach((el) => { if (t[el.dataset.i18nAria]) el.setAttribute("aria-label", t[el.dataset.i18nAria]); });
+    $$("[data-i18n-alt]").forEach((el) => { if (t[el.dataset.i18nAlt]) el.alt = t[el.dataset.i18nAlt]; });
 
     // textos do conteúdo
     $$("[data-campo]").forEach((el) => {
