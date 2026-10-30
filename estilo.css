@@ -286,13 +286,10 @@ main {
 /* os filhos do Benndy, fixos no canto inferior direito (não bloqueiam cliques) */
 .filhos-canto {
   position: fixed; right: 12px; bottom: 8px; z-index: 40;
-  width: clamp(180px, 20vw, 300px); height: auto; pointer-events: none;
-  /* contorno claro de adesivo, senão o gambá some no fundo escuro */
-  filter: drop-shadow(1.5px 0 0 var(--texto)) drop-shadow(-1.5px 0 0 var(--texto))
-          drop-shadow(0 1.5px 0 var(--texto)) drop-shadow(0 -1.5px 0 var(--texto));
+  width: clamp(130px, 13vw, 200px); height: auto; pointer-events: none;
 }
 @media (max-width: 960px) {
-  .filhos-canto { width: clamp(120px, 30vw, 170px); right: 6px; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
+  .filhos-canto { width: clamp(100px, 24vw, 130px); right: 6px; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
 }
 
 /* ================= GALERIA: mural em colunas ================= */
