@@ -290,11 +290,21 @@ main {
   transform-origin: 50% 100%; transition: transform .2s var(--mola);
 }
 .filhos-canto img { display: block; width: 100%; height: auto; }
+/* nota musical flutuando na frente da última filha: avisa que dá para clicar */
+.nota-musical {
+  position: absolute; left: 86%; top: -16%; width: 14%; min-width: 18px; height: auto;
+  overflow: visible; filter: drop-shadow(2px 2px 0 var(--preto));
+  animation: flutua 2.4s ease-in-out infinite;
+}
+.nota-musical path { fill: none; stroke: var(--amarelo); stroke-width: 2.2; stroke-linecap: round; }
+.nota-musical .viga { stroke-width: 4; }
+.nota-musical ellipse { fill: var(--amarelo); }
+@keyframes flutua { 50% { transform: translateY(-7px) rotate(10deg); } }
 .filhos-canto:hover { transform: translateY(-4px); }
 .filhos-canto:focus-visible { outline: 3px dashed var(--amarelo); outline-offset: 4px; }
 .filhos-canto.pulando { animation: pulinho .5s var(--mola); }
 @keyframes pulinho { 30% { transform: translateY(-14px) rotate(-3deg); } 60% { transform: translateY(0) rotate(2deg); } }
-@media (prefers-reduced-motion: reduce) { .filhos-canto, .filhos-canto.pulando { transition: none; animation: none; } }
+@media (prefers-reduced-motion: reduce) { .filhos-canto, .filhos-canto.pulando, .nota-musical { transition: none; animation: none; } }
 @media (max-width: 960px) {
   .filhos-canto { width: clamp(100px, 24vw, 130px); right: 6px; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
 }
