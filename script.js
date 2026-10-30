@@ -1009,7 +1009,7 @@
   /* ---------------- os filhos assobiam quando alguém clica neles ---------------- */
   let assobio;
   $("#filhos-canto").addEventListener("click", (ev) => {
-    assobio ||= new Audio("sons/assobio.mp3?v=2");
+    assobio ||= new Audio("sons/assobio.mp3?v=3");
     assobio.currentTime = 0;
     assobio.play().catch(() => {});
     const filhos = ev.currentTarget;
