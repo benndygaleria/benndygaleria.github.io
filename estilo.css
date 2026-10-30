@@ -283,20 +283,17 @@ main {
 .pagina-sobre .pagina-titulo { color: var(--amarelo); }
 .pagina-sub { color: var(--texto-2); font: 400 1.1rem/1.5 var(--fonte-maquina); max-width: 52ch; padding-bottom: .3em; }
 
-/* rodapé: os filhos do Benndy passeando embaixo de todas as abas */
-.rodape-filhos {
-  margin-top: clamp(56px, 7vw, 96px); padding-top: 28px;
-  border-top: 3px dashed var(--linha-fraca);
-  display: grid; justify-items: center; gap: 6px;
-}
-.rodape-filhos img {
-  width: min(100%, 640px); height: auto;
+/* os filhos do Benndy, fixos no canto inferior direito (não bloqueiam cliques) */
+.filhos-canto {
+  position: fixed; right: 12px; bottom: 8px; z-index: 40;
+  width: clamp(180px, 20vw, 300px); height: auto; pointer-events: none;
   /* contorno claro de adesivo, senão o gambá some no fundo escuro */
   filter: drop-shadow(1.5px 0 0 var(--texto)) drop-shadow(-1.5px 0 0 var(--texto))
-          drop-shadow(0 1.5px 0 var(--texto)) drop-shadow(0 -1.5px 0 var(--texto))
-          drop-shadow(5px 5px 0 var(--roxo));
+          drop-shadow(0 1.5px 0 var(--texto)) drop-shadow(0 -1.5px 0 var(--texto));
 }
-.rodape-filhos p { font: 400 1.3rem/1 var(--fonte-mao); color: var(--amarelo); transform: rotate(-2deg); }
+@media (max-width: 960px) {
+  .filhos-canto { width: clamp(120px, 30vw, 170px); right: 6px; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
+}
 
 /* ================= GALERIA: mural em colunas ================= */
 
